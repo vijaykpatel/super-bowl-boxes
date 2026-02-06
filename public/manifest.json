@@ -1,0 +1,9 @@
+{
+  "name": "Super Bowl Squares",
+  "short_name": "SB Squares",
+  "description": "Pick your squares and win big! Seahawks vs Patriots.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f1724",
+  "theme_color": "#0f1724"
+}
