@@ -25,6 +25,7 @@ const config: Config = {
           navy: 'hsl(var(--patriots-navy))',
           red: 'hsl(var(--patriots-red))',
         },
+        pending: 'hsl(var(--pending))',
         card: {
           DEFAULT: 'hsl(var(--card))',
           foreground: 'hsl(var(--card-foreground))',

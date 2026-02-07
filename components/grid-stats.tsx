@@ -5,27 +5,40 @@ import { useGame } from "@/lib/game-context"
 export function GridStats() {
   const { boxes } = useGame()
 
-  const taken = boxes.filter((b) => b.owner).length
-  const available = 100 - taken
-  const percentage = taken
+  const confirmed = boxes.filter((b) => b.status === "confirmed").length
+  const pending = boxes.filter((b) => b.status === "pending").length
+  const available = boxes.filter((b) => b.status === "available").length
+  const claimedPercent = confirmed + pending
 
   return (
     <div className="w-full max-w-2xl mx-auto">
       <div className="flex items-center justify-between mb-2">
         <span className="text-muted-foreground text-xs sm:text-sm font-medium">
           <span className="text-seahawks-green font-bold">{available}</span>{" "}
-          squares available
+          available
         </span>
-        <span className="text-muted-foreground text-xs sm:text-sm font-medium">
-          <span className="text-patriots-red font-bold">{taken}</span>/100
-          claimed
-        </span>
+        <div className="flex items-center gap-3">
+          {pending > 0 && (
+            <span className="text-muted-foreground text-xs sm:text-sm font-medium">
+              <span className="text-pending font-bold">{pending}</span>{" "}
+              pending
+            </span>
+          )}
+          <span className="text-muted-foreground text-xs sm:text-sm font-medium">
+            <span className="text-patriots-red font-bold">{confirmed}</span>{" "}
+            confirmed
+          </span>
+        </div>
       </div>
       {/* Progress bar */}
-      <div className="w-full h-2 bg-secondary rounded-full overflow-hidden">
+      <div className="w-full h-2 bg-secondary rounded-full overflow-hidden flex">
         <div
-          className="h-full bg-gradient-to-r from-patriots-red to-patriots-red/70 rounded-full transition-all duration-500"
-          style={{ width: `${percentage}%` }}
+          className="h-full bg-patriots-red rounded-l-full transition-all duration-500"
+          style={{ width: `${confirmed}%` }}
+        />
+        <div
+          className="h-full bg-pending transition-all duration-500"
+          style={{ width: `${pending}%` }}
         />
       </div>
     </div>

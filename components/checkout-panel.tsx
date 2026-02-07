@@ -12,18 +12,18 @@ export function CheckoutPanel() {
     setPlayerName,
     gamePhase,
     setGamePhase,
-    confirmSelection,
+    submitSelection,
     clearSelection,
   } = useGame()
 
   const count = selectedBoxIds.size
 
-  if (gamePhase === "confirmed") {
+  if (gamePhase === "submitted") {
     return (
       <div className="w-full max-w-md mx-auto">
-        <div className="bg-seahawks-green/20 border border-seahawks-green/40 rounded-lg p-4 text-center">
+        <div className="bg-pending/10 border border-pending/30 rounded-lg p-4 text-center">
           <svg
-            className="w-8 h-8 text-seahawks-green mx-auto mb-2"
+            className="w-8 h-8 text-pending mx-auto mb-2"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -32,14 +32,14 @@ export function CheckoutPanel() {
               strokeLinecap="round"
               strokeLinejoin="round"
               strokeWidth={2}
-              d="M5 13l4 4L19 7"
+              d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
             />
           </svg>
           <p className="text-foreground font-display text-lg font-bold">
-            Squares Claimed!
+            Squares Submitted!
           </p>
           <p className="text-muted-foreground text-sm mt-1">
-            Your squares have been locked in. Good luck!
+            Your squares are pending confirmation. Please send payment to lock them in.
           </p>
         </div>
       </div>
@@ -63,11 +63,17 @@ export function CheckoutPanel() {
           <h3 className="font-display text-lg font-bold text-foreground mb-1">
             Claim Your Squares
           </h3>
-          <p className="text-muted-foreground text-sm mb-4">
+          <p className="text-muted-foreground text-sm mb-3">
             You selected{" "}
             <span className="text-seahawks-green font-bold">{count}</span>{" "}
             {count === 1 ? "square" : "squares"}
           </p>
+
+          <div className="bg-pending/10 border border-pending/20 rounded-md p-3 mb-4">
+            <p className="text-pending text-xs font-medium">
+              Your squares will be held as PENDING until payment is confirmed by the admin. Please send payment after submitting.
+            </p>
+          </div>
 
           <div className="flex flex-col gap-3">
             <Input
@@ -87,7 +93,7 @@ export function CheckoutPanel() {
                 Cancel
               </Button>
               <Button
-                onClick={confirmSelection}
+                onClick={submitSelection}
                 disabled={!playerName.trim()}
                 className={cn(
                   "flex-1 h-12 font-display font-bold uppercase tracking-wide text-sm",
@@ -96,7 +102,7 @@ export function CheckoutPanel() {
                     : "bg-muted text-muted-foreground"
                 )}
               >
-                Lock It In
+                Submit
               </Button>
             </div>
           </div>

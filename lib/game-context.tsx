@@ -8,15 +8,18 @@ import {
   type ReactNode,
 } from "react"
 
+export type BoxStatus = "available" | "pending" | "confirmed"
+
 export type BoxState = {
   id: number
   row: number
   col: number
   owner: string | null
+  status: BoxStatus
   isSelected: boolean
 }
 
-type GamePhase = "selecting" | "checkout" | "confirmed"
+type GamePhase = "selecting" | "checkout" | "submitted"
 
 type GameContextType = {
   boxes: BoxState[]
@@ -29,9 +32,12 @@ type GameContextType = {
   toggleBox: (id: number) => void
   setPlayerName: (name: string) => void
   setGamePhase: (phase: GamePhase) => void
-  confirmSelection: () => void
+  submitSelection: () => void
   clearSelection: () => void
   revealNumbers: () => void
+  confirmBox: (id: number) => void
+  rejectBox: (id: number) => void
+  confirmAll: () => void
 }
 
 const GameContext = createContext<GameContextType | undefined>(undefined)
@@ -54,6 +60,7 @@ function initializeBoxes(): BoxState[] {
         row,
         col,
         owner: null,
+        status: "available",
         isSelected: false,
       })
     }
@@ -74,7 +81,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
     (id: number) => {
       if (gamePhase !== "selecting") return
       const box = boxes.find((b) => b.id === id)
-      if (!box || box.owner) return
+      if (!box || box.status !== "available") return
 
       setSelectedBoxIds((prev) => {
         const next = new Set(prev)
@@ -89,19 +96,19 @@ export function GameProvider({ children }: { children: ReactNode }) {
     [boxes, gamePhase]
   )
 
-  const confirmSelection = useCallback(() => {
+  const submitSelection = useCallback(() => {
     if (selectedBoxIds.size === 0 || !playerName.trim()) return
     setBoxes((prev) =>
       prev.map((box) =>
         selectedBoxIds.has(box.id)
-          ? { ...box, owner: playerName.trim(), isSelected: false }
+          ? { ...box, owner: playerName.trim(), status: "pending" as BoxStatus, isSelected: false }
           : box
       )
     )
     setSelectedBoxIds(new Set())
     setPlayerName("")
-    setGamePhase("confirmed")
-    setTimeout(() => setGamePhase("selecting"), 2000)
+    setGamePhase("submitted")
+    setTimeout(() => setGamePhase("selecting"), 3000)
   }, [selectedBoxIds, playerName])
 
   const clearSelection = useCallback(() => {
@@ -113,6 +120,37 @@ export function GameProvider({ children }: { children: ReactNode }) {
     setRowNumbers(generateShuffledNumbers())
     setColNumbers(generateShuffledNumbers())
     setNumbersRevealed(true)
+  }, [])
+
+  // Admin actions
+  const confirmBox = useCallback((id: number) => {
+    setBoxes((prev) =>
+      prev.map((box) =>
+        box.id === id && box.status === "pending"
+          ? { ...box, status: "confirmed" as BoxStatus }
+          : box
+      )
+    )
+  }, [])
+
+  const rejectBox = useCallback((id: number) => {
+    setBoxes((prev) =>
+      prev.map((box) =>
+        box.id === id && box.status === "pending"
+          ? { ...box, owner: null, status: "available" as BoxStatus }
+          : box
+      )
+    )
+  }, [])
+
+  const confirmAll = useCallback(() => {
+    setBoxes((prev) =>
+      prev.map((box) =>
+        box.status === "pending"
+          ? { ...box, status: "confirmed" as BoxStatus }
+          : box
+      )
+    )
   }, [])
 
   return (
@@ -128,9 +166,12 @@ export function GameProvider({ children }: { children: ReactNode }) {
         toggleBox,
         setPlayerName,
         setGamePhase,
-        confirmSelection,
+        submitSelection,
         clearSelection,
         revealNumbers,
+        confirmBox,
+        rejectBox,
+        confirmAll,
       }}
     >
       {children}

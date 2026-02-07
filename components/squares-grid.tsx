@@ -1,21 +1,25 @@
 "use client"
 
-import { useGame } from "@/lib/game-context"
+import { useGame, type BoxStatus } from "@/lib/game-context"
 import { cn } from "@/lib/utils"
 import Image from "next/image"
 
 function GridCell({
   id,
   owner,
+  status,
   isInSelection,
   onClick,
 }: {
   id: number
   owner: string | null
+  status: BoxStatus
   isInSelection: boolean
   onClick: () => void
 }) {
-  const isTaken = !!owner
+  const isTaken = status !== "available"
+  const isPending = status === "pending"
+  const isConfirmed = status === "confirmed"
 
   return (
     <button
@@ -23,16 +27,20 @@ function GridCell({
       onClick={onClick}
       disabled={isTaken}
       aria-label={
-        isTaken
-          ? `Square ${id + 1} taken by ${owner}`
-          : isInSelection
-            ? `Square ${id + 1} selected, tap to deselect`
-            : `Square ${id + 1} available, tap to select`
+        isConfirmed
+          ? `Square ${id + 1} confirmed by ${owner}`
+          : isPending
+            ? `Square ${id + 1} pending for ${owner}`
+            : isInSelection
+              ? `Square ${id + 1} selected, tap to deselect`
+              : `Square ${id + 1} available, tap to select`
       }
       className={cn(
         "relative flex items-center justify-center aspect-square min-h-[44px] min-w-[44px] transition-all duration-200 text-[10px] sm:text-xs font-medium border border-border/50 rounded-sm",
-        isTaken &&
+        isConfirmed &&
           "bg-patriots-red/20 text-foreground cursor-not-allowed border-patriots-red/30",
+        isPending &&
+          "bg-pending/15 text-foreground cursor-not-allowed border-pending/40 animate-pulse-pending",
         isInSelection &&
           "bg-seahawks-green/30 border-seahawks-green ring-1 ring-seahawks-green animate-pulse-green",
         !isTaken &&
@@ -40,10 +48,28 @@ function GridCell({
           "bg-secondary/50 hover:bg-secondary hover:border-muted-foreground/40 cursor-pointer active:scale-95"
       )}
     >
-      {isTaken && (
+      {isConfirmed && (
         <span className="truncate px-0.5 leading-tight text-foreground/80">
           {owner}
         </span>
+      )}
+      {isPending && (
+        <div className="flex flex-col items-center">
+          <svg
+            className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-pending"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+          >
+            <path
+              fillRule="evenodd"
+              d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.828a1 1 0 101.415-1.414L11 9.586V6z"
+              clipRule="evenodd"
+            />
+          </svg>
+          <span className="truncate px-0.5 leading-tight text-pending/80 text-[8px] sm:text-[9px]">
+            {owner}
+          </span>
+        </div>
       )}
       {isInSelection && (
         <svg
@@ -127,6 +153,7 @@ export function SquaresGrid() {
                 key={box.id}
                 id={box.id}
                 owner={box.owner}
+                status={box.status}
                 isInSelection={selectedBoxIds.has(box.id)}
                 onClick={() => toggleBox(box.id)}
               />
@@ -135,7 +162,7 @@ export function SquaresGrid() {
         </div>
 
         {/* Legend */}
-        <div className="flex items-center justify-center gap-4 mt-3 text-xs text-muted-foreground">
+        <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 mt-3 text-xs text-muted-foreground">
           <div className="flex items-center gap-1.5">
             <div className="w-3 h-3 rounded-sm bg-secondary/50 border border-border/50" />
             <span>Available</span>
@@ -145,8 +172,12 @@ export function SquaresGrid() {
             <span>Your pick</span>
           </div>
           <div className="flex items-center gap-1.5">
+            <div className="w-3 h-3 rounded-sm bg-pending/15 border border-pending/40" />
+            <span>Pending payment</span>
+          </div>
+          <div className="flex items-center gap-1.5">
             <div className="w-3 h-3 rounded-sm bg-patriots-red/20 border border-patriots-red/30" />
-            <span>Taken</span>
+            <span>Confirmed</span>
           </div>
         </div>
       </div>

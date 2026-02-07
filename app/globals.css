@@ -44,6 +44,7 @@ body {
     --seahawks-green: 145 63% 42%;
     --patriots-navy: 220 55% 20%;
     --patriots-red: 4 80% 52%;
+    --pending: 40 90% 50%;
     --sidebar-background: 220 30% 8%;
     --sidebar-foreground: 210 20% 90%;
     --sidebar-primary: 4 80% 52%;
@@ -75,8 +76,17 @@ body {
   100% { background-position: 200% 0; }
 }
 
+@keyframes pulse-pending {
+  0%, 100% { box-shadow: 0 0 0 0 hsla(40, 90%, 50%, 0.4); }
+  50% { box-shadow: 0 0 0 4px hsla(40, 90%, 50%, 0); }
+}
+
 .animate-pulse-green {
   animation: pulse-green 2s ease-in-out infinite;
+}
+
+.animate-pulse-pending {
+  animation: pulse-pending 2.5s ease-in-out infinite;
 }
 
 .shimmer-bg {

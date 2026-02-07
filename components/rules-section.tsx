@@ -12,18 +12,24 @@ const rules = [
   },
   {
     step: "2",
-    title: "Enter Your Name",
+    title: "Enter Your Name & Submit",
     description:
-      "After selecting your squares, hit checkout and enter your name to claim them.",
+      "After selecting your squares, hit checkout and enter your name. Your squares will be held as PENDING.",
   },
   {
     step: "3",
+    title: "Send Payment",
+    description:
+      "Send payment to confirm your squares. Once the admin verifies payment, your squares turn from yellow (pending) to red (confirmed).",
+  },
+  {
+    step: "4",
     title: "Numbers Get Assigned",
     description:
       "1 hour before kickoff, random numbers (0-9) are assigned to each row and column.",
   },
   {
-    step: "4",
+    step: "5",
     title: "Win Each Quarter",
     description:
       "At the end of each quarter, match the last digit of each team's score to your square. If it matches, you win!",
@@ -63,7 +69,7 @@ export function RulesSection() {
 
       {isOpen && (
         <div className="mt-2 bg-card border border-border rounded-lg p-4">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="flex flex-col gap-4">
             {rules.map((rule) => (
               <div key={rule.step} className="flex gap-3">
                 <div className="shrink-0 w-8 h-8 rounded-full bg-patriots-red/20 border border-patriots-red/30 flex items-center justify-center">

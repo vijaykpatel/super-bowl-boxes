@@ -68,7 +68,7 @@ export function HeroSection() {
         </h1>
 
         <p className="text-muted-foreground text-sm sm:text-base mt-3 text-center max-w-md text-pretty">
-          Pick your squares, enter your name, and lock them in.
+          Pick your squares, submit your claim, and send payment to confirm.
           Numbers are randomly assigned before kickoff!
         </p>
       </div>
