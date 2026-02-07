@@ -14,9 +14,25 @@ export function CheckoutPanel() {
     setGamePhase,
     submitSelection,
     clearSelection,
+    tableLocked,
   } = useGame()
 
   const count = selectedBoxIds.size
+
+  if (tableLocked) {
+    return (
+      <div className="w-full max-w-md mx-auto">
+        <div className="bg-card border border-border rounded-lg p-4 text-center">
+          <p className="text-foreground font-display text-lg font-bold">
+            Table Locked
+          </p>
+          <p className="text-muted-foreground text-sm mt-1">
+            New selections are paused for this table right now.
+          </p>
+        </div>
+      </div>
+    )
+  }
 
   if (gamePhase === "submitted") {
     return (

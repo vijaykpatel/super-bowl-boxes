@@ -24,19 +24,25 @@ const rules = [
   },
   {
     step: "4",
-    title: "Numbers Get Assigned",
+    title: "Table Locks Before Kickoff",
     description:
-      "1 hour before kickoff, random numbers (0-9) are assigned to each row and column.",
+      "The table locks 15 minutes before kickoff so no new squares can be claimed.",
   },
   {
     step: "5",
+    title: "Numbers Get Assigned",
+    description:
+      "5 minutes before kickoff, random numbers (0-9) are assigned to each row and column.",
+  },
+  {
+    step: "6",
     title: "Win Each Quarter",
     description:
       "At the end of each quarter, match the last digit of each team's score to your square. If it matches, you win!",
   },
 ]
 
-export function RulesSection() {
+export function RulesSection({ customRules }: { customRules?: string }) {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
@@ -70,6 +76,11 @@ export function RulesSection() {
       {isOpen && (
         <div className="mt-2 bg-card border border-border rounded-lg p-4">
           <div className="flex flex-col gap-4">
+            {customRules && (
+              <div className="rounded-md border border-border/50 bg-secondary/40 p-3 text-xs text-muted-foreground whitespace-pre-wrap">
+                {customRules}
+              </div>
+            )}
             {rules.map((rule) => (
               <div key={rule.step} className="flex gap-3">
                 <div className="shrink-0 w-8 h-8 rounded-full bg-patriots-red/20 border border-patriots-red/30 flex items-center justify-center">

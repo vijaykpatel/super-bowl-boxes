@@ -3,10 +3,8 @@
 import { useState, useEffect } from "react"
 import { useGame } from "@/lib/game-context"
 
-// Super Bowl LIX is Feb 9, 2025 at 6:30 PM ET
-// Numbers reveal 1 hour before kickoff = 5:30 PM ET
-// Using a future date for demo purposes - adjust as needed
-const REVEAL_TIME = new Date("2026-02-08T22:30:00Z") // 5:30 PM ET = 22:30 UTC
+// Fallback reveal time for demo/local mode
+const REVEAL_TIME = new Date("2026-02-08T22:30:00Z")
 
 type TimeLeft = {
   days: number
@@ -41,16 +39,23 @@ function TimeBlock({ value, label }: { value: number; label: string }) {
   )
 }
 
-export function CountdownTimer() {
+export function CountdownTimer({
+  revealAt,
+  showRevealButton = false,
+}: {
+  revealAt?: number
+  showRevealButton?: boolean
+}) {
   const { numbersRevealed, revealNumbers } = useGame()
+  const target = revealAt ? new Date(revealAt) : REVEAL_TIME
   const [timeLeft, setTimeLeft] = useState<TimeLeft | null>(
-    getTimeLeft(REVEAL_TIME)
+    getTimeLeft(target)
   )
   const [isExpired, setIsExpired] = useState(false)
 
   useEffect(() => {
     const interval = setInterval(() => {
-      const tl = getTimeLeft(REVEAL_TIME)
+      const tl = getTimeLeft(target)
       if (!tl) {
         setIsExpired(true)
         clearInterval(interval)
@@ -59,7 +64,7 @@ export function CountdownTimer() {
       }
     }, 1000)
     return () => clearInterval(interval)
-  }, [])
+  }, [target])
 
   if (numbersRevealed) {
     return (
@@ -80,13 +85,19 @@ export function CountdownTimer() {
         <p className="text-foreground font-display text-lg font-bold mb-3">
           Numbers are ready to be revealed!
         </p>
-        <button
-          type="button"
-          onClick={revealNumbers}
-          className="bg-patriots-red hover:bg-patriots-red/90 text-white font-display font-bold uppercase tracking-wide px-8 py-3 rounded-lg text-base transition-colors min-h-[48px]"
-        >
-          Reveal Numbers
-        </button>
+        {showRevealButton ? (
+          <button
+            type="button"
+            onClick={revealNumbers}
+            className="bg-patriots-red hover:bg-patriots-red/90 text-white font-display font-bold uppercase tracking-wide px-8 py-3 rounded-lg text-base transition-colors min-h-[48px]"
+          >
+            Reveal Numbers
+          </button>
+        ) : (
+          <p className="text-muted-foreground text-sm">
+            Numbers will appear automatically shortly.
+          </p>
+        )}
       </div>
     )
   }
