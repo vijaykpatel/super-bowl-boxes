@@ -111,14 +111,15 @@ export function CheckoutPanel({ pricePerBox }: { pricePerBox: number }) {
           </div>
 
           <div className="flex flex-col gap-3">
-            <Input
-              type="text"
-              placeholder="Enter your name"
-              value={playerName}
-              onChange={(e) => setPlayerName(e.target.value)}
-              className="bg-white/[0.04] border border-white/[0.1] text-foreground placeholder:text-muted-foreground h-13 text-base sm:text-lg rounded-xl focus:border-sb-cyan/50 focus:ring-sb-cyan/20"
-              autoFocus
-            />
+              <Input
+                type="text"
+                placeholder="Enter your name"
+                value={playerName}
+                onChange={(e) => setPlayerName(e.target.value)}
+                maxLength={12}
+                className="bg-white/[0.04] border border-white/[0.1] text-foreground placeholder:text-muted-foreground h-13 text-base sm:text-lg rounded-xl focus:border-sb-cyan/50 focus:ring-sb-cyan/20"
+                autoFocus
+              />
             {error && (
               <p className="text-sm sm:text-base text-destructive">
                 {error}

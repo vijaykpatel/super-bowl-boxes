@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import Image from "next/image"
 import { useEffect, useMemo, useState } from "react"
 import { CountdownTimer } from "@/components/countdown-timer"
+import { SquaresGrid } from "@/components/squares-grid"
 import { cn } from "@/lib/utils"
 import Link from "next/link"
 
@@ -45,10 +46,11 @@ function ClaimRow({
     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-5 p-5 sm:p-6 bg-card border border-border rounded-xl">
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 mb-1">
-          <p className="font-sans font-semibold text-foreground text-xl sm:text-2xl truncate">
+          <p
+            className="font-sans font-semibold text-foreground text-xl sm:text-2xl break-words"
+          >
             {owner}
           </p>
-          <StatusBadge status={status} />
         </div>
         <p className="text-muted-foreground text-base">
           {squareIds.length} {squareIds.length === 1 ? "square" : "squares"}:{" "}
@@ -67,23 +69,20 @@ function ClaimRow({
           <button
             type="button"
             onClick={onDecrement}
-            className="h-12 w-12 rounded-full border border-border text-foreground hover:bg-secondary transition-all text-xl"
+            className="h-10 w-10 rounded-full border border-border text-foreground hover:bg-secondary transition-all text-lg"
             aria-label={status === "pending" ? "Decrease approved count" : "Decrease revoke count"}
           >
             -
           </button>
-          <div className="min-w-[70px] text-center">
-            <p className="text-sm uppercase tracking-[0.25em] text-muted-foreground">
-              {status === "pending" ? "Approve" : "Revoke"}
-            </p>
-            <p className="font-display text-2xl text-foreground">
+          <div className="min-w-[36px] text-center">
+            <p className="font-display text-xl text-foreground">
               {count ?? squareIds.length}
             </p>
           </div>
           <button
             type="button"
             onClick={onIncrement}
-            className="h-12 w-12 rounded-full border border-border text-foreground hover:bg-secondary transition-all text-xl"
+            className="h-10 w-10 rounded-full border border-border text-foreground hover:bg-secondary transition-all text-lg"
             aria-label={status === "pending" ? "Increase approved count" : "Increase revoke count"}
           >
             +
@@ -94,7 +93,7 @@ function ClaimRow({
             <Button
               size="sm"
               onClick={onConfirm}
-              className="bg-seahawks-green hover:bg-seahawks-green/90 text-white font-display font-bold uppercase tracking-wide h-12 px-6 min-w-[140px] text-base"
+              className="bg-seahawks-green hover:bg-seahawks-green/90 text-white font-display font-bold uppercase tracking-wide h-10 px-3 min-w-[104px] text-xs"
             >
               Confirm {count ?? squareIds.length}
             </Button>
@@ -102,7 +101,7 @@ function ClaimRow({
               variant="outline"
               size="sm"
               onClick={onReject}
-              className="border-destructive/50 text-destructive hover:bg-destructive/10 bg-transparent h-12 px-6 min-w-[140px] text-base"
+              className="border-destructive/50 text-destructive hover:bg-destructive/10 bg-transparent h-10 px-3 min-w-[104px] text-xs"
             >
               Reject {count ?? squareIds.length}
             </Button>
@@ -112,7 +111,7 @@ function ClaimRow({
             variant="outline"
             size="sm"
             onClick={onReject}
-            className="border-border text-muted-foreground hover:text-foreground hover:bg-secondary bg-transparent h-12 px-6 min-w-[140px] text-base"
+            className="border-border text-muted-foreground hover:text-foreground hover:bg-secondary bg-transparent h-10 px-3 min-w-[104px] text-xs"
           >
             Revoke {count ?? squareIds.length}
           </Button>
@@ -129,7 +128,7 @@ export function AdminDashboard({
   tableName: string
   kickoffAt: number
 }) {
-  const { boxes, confirmBoxes, rejectBoxes, confirmAll, tableLocked } = useGame()
+  const { boxes, confirmBoxes, rejectBoxes, confirmAll, reshuffleNumbers, tableLocked } = useGame()
 
   // Group boxes by owner and status
   const claims = useMemo(() => {
@@ -247,6 +246,33 @@ export function AdminDashboard({
             <p className="text-muted-foreground text-base mt-0.5">Available</p>
           </div>
         </div>
+      </div>
+
+      {/* Table view */}
+      <div className="px-4 sm:px-6 pt-8 pb-10 max-w-4xl mx-auto w-full">
+        <div className="mb-4 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+          <div>
+            <h2 className="font-display text-2xl sm:text-3xl uppercase tracking-tight text-foreground">
+              Table View
+            </h2>
+            <p className="text-muted-foreground text-base mt-1">
+              Live status with numbers revealed for admin.
+            </p>
+          </div>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => {
+              const ok = window.confirm("Re-roll the numbers? This will change the row/column digits for everyone.")
+              if (!ok) return
+              reshuffleNumbers()
+            }}
+            className="h-11 px-4 border-border text-muted-foreground hover:text-foreground hover:bg-secondary bg-transparent"
+          >
+            Re-roll Numbers
+          </Button>
+        </div>
+        <SquaresGrid readOnly forceRevealNumbers />
       </div>
 
       {/* Content */}

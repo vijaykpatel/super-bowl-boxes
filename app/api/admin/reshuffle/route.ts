@@ -1,10 +1,10 @@
 import { NextResponse } from "next/server"
 import { z } from "zod"
-import { claimBoxes } from "@/lib/game-store"
+import { reshuffleNumbers } from "@/lib/game-store"
+import { verifyAdminPassword } from "@/lib/admin-auth"
 
 const schema = z.object({
-  playerName: z.string().min(1).max(12),
-  boxIds: z.array(z.number().int().min(0).max(99)).min(1),
+  adminPassword: z.string().min(1),
 })
 
 export async function POST(req: Request) {
@@ -13,11 +13,10 @@ export async function POST(req: Request) {
   if (!parsed.success) {
     return NextResponse.json({ error: "Invalid payload" }, { status: 400 })
   }
-
-  const result = await claimBoxes(parsed.data.playerName.trim(), parsed.data.boxIds)
-  if (!result.ok) {
-    return NextResponse.json({ error: result.error }, { status: 403 })
+  if (!verifyAdminPassword(parsed.data.adminPassword)) {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 })
   }
 
+  await reshuffleNumbers()
   return NextResponse.json({ ok: true })
 }

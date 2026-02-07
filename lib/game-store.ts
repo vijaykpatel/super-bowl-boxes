@@ -38,8 +38,9 @@ function createInitialState(): StoreState {
   return {
     state: {
       boxes: initializeBoxes(),
-      rowNumbers: null,
-      colNumbers: null,
+      // Pre-generate numbers so they're ready ahead of reveal time.
+      rowNumbers: generateShuffledNumbers(),
+      colNumbers: generateShuffledNumbers(),
       numbersRevealed: false,
       updatedAt: Date.now(),
     },
@@ -49,7 +50,21 @@ function createInitialState(): StoreState {
 
 async function getStore(): Promise<StoreState> {
   const existing = await kv.get<StoreState>(STORE_KEY)
-  if (existing) return existing
+  if (existing) {
+    // Ensure numbers are pre-generated even if older data didn't have them.
+    if (!existing.state.rowNumbers || !existing.state.colNumbers) {
+      const next = structuredClone(existing)
+      next.state = {
+        ...next.state,
+        rowNumbers: next.state.rowNumbers ?? generateShuffledNumbers(),
+        colNumbers: next.state.colNumbers ?? generateShuffledNumbers(),
+        updatedAt: Date.now(),
+      }
+      await kv.set(STORE_KEY, next)
+      return next
+    }
+    return existing
+  }
   const initial = createInitialState()
   await kv.set(STORE_KEY, initial)
   return initial
@@ -63,8 +78,8 @@ function applyAutoRules(next: StoreState) {
   if (now >= getRevealTime() && !next.state.numbersRevealed) {
     next.state = {
       ...next.state,
-      rowNumbers: generateShuffledNumbers(),
-      colNumbers: generateShuffledNumbers(),
+      rowNumbers: next.state.rowNumbers ?? generateShuffledNumbers(),
+      colNumbers: next.state.colNumbers ?? generateShuffledNumbers(),
       numbersRevealed: true,
       updatedAt: now,
     }
@@ -168,9 +183,21 @@ export async function revealNumbers() {
   if (next.state.numbersRevealed) return
   next.state = {
     ...next.state,
+    rowNumbers: next.state.rowNumbers ?? generateShuffledNumbers(),
+    colNumbers: next.state.colNumbers ?? generateShuffledNumbers(),
+    numbersRevealed: true,
+    updatedAt: Date.now(),
+  }
+  await kv.set(STORE_KEY, next)
+}
+
+export async function reshuffleNumbers() {
+  const previous = await getStore()
+  const next = structuredClone(previous)
+  next.state = {
+    ...next.state,
     rowNumbers: generateShuffledNumbers(),
     colNumbers: generateShuffledNumbers(),
-    numbersRevealed: true,
     updatedAt: Date.now(),
   }
   await kv.set(STORE_KEY, next)

@@ -1,6 +1,6 @@
 "use client"
 
-import React from "react"
+import React, { useState } from "react"
 import { useGame } from "@/lib/game-context"
 import type { BoxStatus } from "@/lib/game-types"
 import { cn } from "@/lib/utils"
@@ -11,23 +11,47 @@ function GridCell({
   owner,
   status,
   isInSelection,
-  onClick,
+  onSelect,
+  onFocusCell,
+  readOnly,
+  focusRow,
+  focusCol,
+  focusActive,
 }: {
   id: number
   owner: string | null
   status: BoxStatus
   isInSelection: boolean
-  onClick: () => void
+  onSelect: () => void
+  onFocusCell: () => void
+  readOnly: boolean
+  focusRow: number | null
+  focusCol: number | null
+  focusActive: boolean
 }) {
   const isTaken = status !== "available"
   const isPending = status === "pending"
   const isConfirmed = status === "confirmed"
+  const row = Math.floor(id / 10)
+  const col = id % 10
+  const isAlt = (row + col) % 2 === 0
+  const isFocusCell = focusRow === row && focusCol === col
+  const isFocusAxis = focusRow === row || focusCol === col
+  const shouldDim = focusActive && !isFocusAxis
+  const shouldDimAxis = focusActive && isFocusAxis && !isFocusCell
 
   return (
     <button
       type="button"
-      onClick={onClick}
-      disabled={isTaken}
+      onClick={(event) => {
+        event.stopPropagation()
+        if (isTaken || readOnly) {
+          onFocusCell()
+          return
+        }
+        onSelect()
+      }}
+      aria-disabled={!readOnly && isTaken}
       aria-label={
         isConfirmed
           ? `Square ${id + 1} confirmed by ${owner}`
@@ -38,20 +62,27 @@ function GridCell({
               : `Square ${id + 1} available, tap to select`
       }
       className={cn(
-        "relative flex items-center justify-center aspect-square transition-all duration-150 text-[7px] sm:text-[9px] lg:text-xs font-semibold rounded border sm:rounded-md lg:rounded-lg",
+        "relative flex items-center justify-center aspect-square transition-all duration-150 text-[7px] sm:text-[9px] lg:text-xs font-semibold rounded border sm:rounded-md lg:rounded-lg after:content-[''] after:absolute after:inset-0 after:rounded-[inherit] after:pointer-events-none after:mix-blend-screen after:opacity-20",
+        isAlt ? "after:bg-white/12" : "after:bg-white/6",
         isConfirmed &&
-          "bg-patriots-red/25 text-foreground cursor-not-allowed border-patriots-red/40",
+          "bg-patriots-red/25 text-foreground border-patriots-red/40 cursor-pointer",
         isPending &&
-          "bg-pending/20 text-foreground cursor-not-allowed border-pending/50 animate-pulse-pending",
+          "bg-pending/20 text-foreground border-pending/50 animate-pulse-pending cursor-pointer",
         isInSelection &&
           "bg-seahawks-green/30 border-seahawks-green ring-1 ring-seahawks-green/50 animate-pulse-green",
+        isFocusCell && "ring-2 ring-sb-cyan/80 shadow-[0_0_18px_hsla(190,100%,50%,0.35)]",
+        shouldDim && "opacity-35 blur-[0.3px]",
+        shouldDimAxis && "opacity-70",
         !isTaken &&
           !isInSelection &&
           "bg-white/[0.03] hover:bg-white/[0.1] hover:border-white/[0.15] border-white/[0.06] cursor-pointer active:scale-95 transition-colors"
       )}
     >
       {isConfirmed && (
-        <span className="truncate px-0.5 leading-tight text-foreground/80 font-medium">
+        <span
+          className="px-0.5 text-[6px] sm:text-[8px] lg:text-[10px] leading-tight text-foreground/80 font-medium max-w-full text-center break-words whitespace-normal"
+          title={owner ?? undefined}
+        >
           {owner}
         </span>
       )}
@@ -68,7 +99,10 @@ function GridCell({
               clipRule="evenodd"
             />
           </svg>
-          <span className="truncate px-0.5 leading-tight text-pending font-medium text-[6px] sm:text-[8px] lg:text-[10px]">
+          <span
+            className="px-0.5 text-[6px] sm:text-[8px] lg:text-[10px] leading-tight text-pending font-medium max-w-full text-center break-words whitespace-normal"
+            title={owner ?? undefined}
+          >
             {owner}
           </span>
         </div>
@@ -90,8 +124,19 @@ function GridCell({
   )
 }
 
-export function SquaresGrid() {
+export function SquaresGrid({
+  readOnly = false,
+  forceRevealNumbers = false,
+}: {
+  readOnly?: boolean
+  forceRevealNumbers?: boolean
+}) {
   const { boxes, selectedBoxIds, toggleBox, rowNumbers, colNumbers, numbersRevealed } = useGame()
+  const showNumbers = numbersRevealed || forceRevealNumbers
+  const [focusId, setFocusId] = useState<number | null>(null)
+  const focusRow = focusId !== null ? Math.floor(focusId / 10) : null
+  const focusCol = focusId !== null ? focusId % 10 : null
+  const focusActive = focusId !== null
 
   return (
     <div className="w-full max-w-[820px] mx-auto">
@@ -125,7 +170,12 @@ export function SquaresGrid() {
         </div>
 
         {/* Card wrapper with centered grid */}
-        <div className="flex-1 grid-shell rounded-2xl sm:rounded-3xl p-2 sm:p-3 lg:p-4">
+        <div
+          className="flex-1 grid-shell rounded-2xl sm:rounded-3xl p-2 sm:p-3 lg:p-4"
+          onClick={() => {
+            if (focusId !== null) setFocusId(null)
+          }}
+        >
           <div className="w-full max-w-[740px] mx-auto">
             {/* Column numbers row */}
             <div className="flex">
@@ -133,8 +183,13 @@ export function SquaresGrid() {
               <div className="flex-1 grid grid-cols-10 gap-[3px] sm:gap-1.5 lg:gap-1.5 mb-[3px] sm:mb-1.5 lg:mb-1.5">
                 {Array.from({ length: 10 }).map((_, i) => (
                   <div key={`col-${i}`} className="flex items-center justify-center">
-                    <span className="text-xs sm:text-base lg:text-base font-display text-patriots-red tabular-nums font-bold">
-                      {numbersRevealed && colNumbers ? colNumbers[i] : "?"}
+                    <span
+                      className={cn(
+                        "text-base sm:text-xl lg:text-2xl font-sans text-patriots-red tabular-nums font-semibold transition-colors",
+                        focusActive && focusCol === i && "text-sb-cyan"
+                      )}
+                    >
+                      {showNumbers && colNumbers ? colNumbers[i] : "?"}
                     </span>
                   </div>
                 ))}
@@ -150,8 +205,13 @@ export function SquaresGrid() {
                     key={`row-${i}`}
                     className="flex items-center justify-center aspect-square"
                   >
-                    <span className="text-sm sm:text-lg lg:text-lg font-display text-seahawks-green tabular-nums font-bold">
-                      {numbersRevealed && rowNumbers ? rowNumbers[i] : "?"}
+                    <span
+                      className={cn(
+                        "text-base sm:text-xl lg:text-2xl font-sans text-seahawks-green tabular-nums font-semibold transition-colors",
+                        focusActive && focusRow === i && "text-sb-cyan"
+                      )}
+                    >
+                      {showNumbers && rowNumbers ? rowNumbers[i] : "?"}
                     </span>
                   </div>
                 ))}
@@ -166,7 +226,18 @@ export function SquaresGrid() {
                     owner={box.owner}
                     status={box.status}
                     isInSelection={selectedBoxIds.has(box.id)}
-                    onClick={() => toggleBox(box.id)}
+                    onSelect={() => {
+                      if (focusActive) return
+                      toggleBox(box.id)
+                    }}
+                    onFocusCell={() => {
+                      if (box.status === "available") return
+                      setFocusId((prev) => (prev === box.id ? null : box.id))
+                    }}
+                    readOnly={readOnly}
+                    focusRow={focusRow}
+                    focusCol={focusCol}
+                    focusActive={focusActive}
                   />
                 ))}
               </div>

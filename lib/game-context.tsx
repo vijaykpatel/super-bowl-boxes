@@ -34,6 +34,7 @@ type GameContextType = {
   confirmBoxes: (ids: number[]) => void
   rejectBoxes: (ids: number[]) => void
   confirmAll: () => void
+  reshuffleNumbers: () => Promise<void>
   refreshState?: () => void
   adminPassword?: string
 }
@@ -254,6 +255,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
         confirmBoxes,
         rejectBoxes,
         confirmAll,
+        reshuffleNumbers: async () => {},
         refreshState: undefined,
         adminPassword: undefined,
       }}
@@ -293,12 +295,7 @@ export function ServerGameProvider({ children, initialState, initialLock, adminP
     setLockReason(data.table.lock.reason)
   }, [])
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      refreshState()
-    }, 5000)
-    return () => clearInterval(interval)
-  }, [refreshState])
+  // Polling removed; clients refresh manually or via actions.
 
   const toggleBox = useCallback(
     (id: number) => {
@@ -407,6 +404,17 @@ export function ServerGameProvider({ children, initialState, initialLock, adminP
     confirmBoxes(pendingIds)
   }, [adminPassword, boxes, confirmBoxes])
 
+  const reshuffleNumbers = useCallback(async () => {
+    if (!adminPassword) return
+    const res = await fetch(`/api/admin/reshuffle`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ adminPassword }),
+    })
+    if (!res.ok) return
+    refreshState()
+  }, [adminPassword, refreshState])
+
   return (
     <GameContext.Provider
       value={{
@@ -430,6 +438,7 @@ export function ServerGameProvider({ children, initialState, initialLock, adminP
         confirmBoxes,
         rejectBoxes,
         confirmAll,
+        reshuffleNumbers,
         refreshState,
         adminPassword,
       }}
