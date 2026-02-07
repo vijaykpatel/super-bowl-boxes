@@ -129,7 +129,7 @@ export function SquaresGrid() {
           <div className="flex flex-col items-center justify-center w-8 sm:w-12 lg:w-14 mr-1 sm:mr-2">
             <div className="flex flex-col items-center gap-0 leading-none">
               {"SEAHAWKS".split("").map((letter, i) => (
-                <span key={i} className="font-display text-sm sm:text-xl lg:text-2xl text-seahawks-green/90 font-bold">
+                <span key={i} className="font-display text-base sm:text-2xl lg:text-3xl text-seahawks-green/90 font-bold">
                   {letter}
                 </span>
               ))}
@@ -143,7 +143,7 @@ export function SquaresGrid() {
                 key={`row-${i}`}
                 className="flex items-center justify-center aspect-square"
               >
-                <span className="text-xs sm:text-base lg:text-lg font-display text-seahawks-green tabular-nums font-bold">
+                <span className="text-sm sm:text-lg lg:text-xl font-display text-seahawks-green tabular-nums font-bold">
                   {numbersRevealed && rowNumbers ? rowNumbers[i] : "?"}
                 </span>
               </div>
@@ -167,7 +167,7 @@ export function SquaresGrid() {
       </div>
 
       {/* Legend */}
-      <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-6 mt-4 sm:mt-6 pt-4 sm:pt-5 border-t border-white/[0.06] text-[10px] sm:text-xs lg:text-sm text-white/40">
+      <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-6 mt-4 sm:mt-6 pt-4 sm:pt-5 border-t border-white/[0.06] text-sm sm:text-base lg:text-lg text-white/40">
         <div className="flex items-center gap-1.5">
           <div className="w-3 h-3 rounded bg-white/[0.03] border border-white/[0.06]" />
           <span>Available</span>

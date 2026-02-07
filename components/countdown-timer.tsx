@@ -25,14 +25,14 @@ function getTimeLeft(target: Date): TimeLeft | null {
 
 function TimeBlock({ value, label }: { value: number; label: string }) {
   return (
-    <div className="flex flex-col items-center gap-1.5 sm:gap-2">
-      <div className="countdown-block rounded-lg sm:rounded-xl lg:rounded-2xl w-14 h-14 sm:w-20 sm:h-20 lg:w-28 lg:h-28 flex items-center justify-center relative overflow-hidden">
+    <div className="flex flex-col items-center gap-2 sm:gap-2.5">
+      <div className="countdown-block rounded-lg sm:rounded-xl lg:rounded-2xl w-16 h-16 sm:w-24 sm:h-24 lg:w-32 lg:h-32 flex items-center justify-center relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-white/[0.02] to-transparent pointer-events-none" />
-        <span className="font-display text-2xl sm:text-4xl lg:text-6xl text-white tabular-nums relative">
+        <span className="font-display text-3xl sm:text-5xl lg:text-7xl text-white tabular-nums relative">
           {String(value).padStart(2, "0")}
         </span>
       </div>
-      <span className="text-[9px] sm:text-[10px] lg:text-xs text-white/40 uppercase tracking-[0.15em] sm:tracking-[0.2em] font-medium">
+      <span className="text-[10px] sm:text-xs lg:text-sm text-white/40 uppercase tracking-[0.15em] sm:tracking-[0.2em] font-medium">
         {label}
       </span>
     </div>
@@ -41,9 +41,9 @@ function TimeBlock({ value, label }: { value: number; label: string }) {
 
 function Separator() {
   return (
-    <div className="flex flex-col items-center justify-center h-14 sm:h-20 lg:h-28 px-0.5">
-      <div className="w-1 h-1 sm:w-1.5 sm:h-1.5 lg:w-2 lg:h-2 rounded-full bg-sb-cyan/60 mb-1.5 sm:mb-2 lg:mb-3" />
-      <div className="w-1 h-1 sm:w-1.5 sm:h-1.5 lg:w-2 lg:h-2 rounded-full bg-sb-cyan/60" />
+    <div className="flex flex-col items-center justify-center h-16 sm:h-24 lg:h-32 px-1">
+      <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 lg:w-2.5 lg:h-2.5 rounded-full bg-sb-cyan/60 mb-2 sm:mb-3 lg:mb-4" />
+      <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 lg:w-2.5 lg:h-2.5 rounded-full bg-sb-cyan/60" />
     </div>
   )
 }
@@ -118,10 +118,10 @@ export function CountdownTimer({
 
   return (
     <div className="text-center">
-      <p className="text-white/40 text-xs sm:text-sm uppercase tracking-[0.3em] mb-6 sm:mb-8 font-medium">
+      <p className="text-white/40 text-sm sm:text-base uppercase tracking-[0.3em] mb-6 sm:mb-8 font-medium">
         Numbers reveal in
       </p>
-      <div className="flex items-start justify-center gap-1 sm:gap-2 lg:gap-3">
+      <div className="flex items-start justify-center gap-2 sm:gap-3 lg:gap-4">
         <TimeBlock value={timeLeft.days} label="Days" />
         <Separator />
         <TimeBlock value={timeLeft.hours} label="Hours" />

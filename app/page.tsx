@@ -84,7 +84,7 @@ export default function Page() {
             <div className="flex items-center gap-2 text-xs sm:text-sm text-white/40">
               <span className="hidden sm:inline uppercase tracking-wider">Super Bowl LIX</span>
               <span className="hidden sm:inline text-white/15">|</span>
-              <span className="font-display text-base sm:text-lg text-sb-cyan">${data.table.pricePerBox}<span className="text-white/30 text-xs">/box</span></span>
+              <span className="font-display text-lg sm:text-xl text-sb-cyan">${data.table.pricePerBox}<span className="text-white/30 text-sm">/box</span></span>
             </div>
             <Image
               src="/images/nfl-logo.png"
@@ -164,23 +164,17 @@ export default function Page() {
                   <div className="absolute -inset-12 bg-seahawks-green/8 rounded-full blur-3xl" />
                   <Image
                     src="/images/jsn-darnold.webp"
-                    alt="Jaxon Smith-Njigba"
+                    alt="Jaxon Smith-Njigba & Sam Darnold"
                     width={400}
                     height={520}
-                    className="relative w-60 h-72 lg:w-72 lg:h-[380px] xl:w-80 xl:h-[420px] rounded-2xl object-cover object-top border-2 border-seahawks-green/40 shadow-[0_8px_40px_hsla(152,85%,45%,0.2)]"
+                    className="relative w-[270px] h-72 lg:w-[340px] lg:h-[380px] xl:w-[380px] xl:h-[420px] rounded-2xl object-cover object-top border-2 border-seahawks-green/40 shadow-[0_8px_40px_hsla(152,85%,45%,0.2)]"
                   />
-                  <Image
-                    src="/images/seahawks-logo.png"
-                    alt="Seahawks"
-                    width={56}
-                    height={56}
-                    className="absolute -bottom-3 -right-3 w-14 h-14 rounded-full object-cover border-[3px] border-background shadow-xl ring-2 ring-seahawks-green/30"
-                  />
+                  {/* Logo badge removed per request */}
                 </div>
                 <p className="font-display text-3xl lg:text-4xl uppercase tracking-wider text-seahawks-green drop-shadow-lg">
                   Seahawks
                 </p>
-                <p className="text-sm text-white/50 mt-1 tracking-wide">Jaxon Smith-Njigba</p>
+                <p className="text-sm text-white/50 mt-1 tracking-wide">Jaxon Smith-Njigba & Sam Darnold</p>
               </div>
 
               {/* VS center — GLOWING */}
@@ -210,15 +204,9 @@ export default function Page() {
                     alt="Drake Maye"
                     width={400}
                     height={520}
-                    className="relative w-60 h-72 lg:w-72 lg:h-[380px] xl:w-80 xl:h-[420px] rounded-2xl object-cover object-top border-2 border-patriots-red/40 shadow-[0_8px_40px_hsla(0,80%,55%,0.2)]"
+                    className="relative w-[270px] h-72 lg:w-[340px] lg:h-[380px] xl:w-[380px] xl:h-[420px] rounded-2xl object-cover object-top border-2 border-patriots-red/40 shadow-[0_8px_40px_hsla(0,80%,55%,0.2)]"
                   />
-                  <Image
-                    src="/images/patriots-logo.png"
-                    alt="Patriots"
-                    width={56}
-                    height={56}
-                    className="absolute -bottom-3 -left-3 w-14 h-14 rounded-full object-cover border-[3px] border-background shadow-xl ring-2 ring-patriots-red/30"
-                  />
+                  {/* Logo badge removed per request */}
                 </div>
                 <p className="font-display text-3xl lg:text-4xl uppercase tracking-wider text-patriots-red drop-shadow-lg">
                   Patriots
@@ -237,18 +225,12 @@ export default function Page() {
                     <div className="absolute -inset-3 bg-seahawks-green/15 rounded-2xl blur-xl" />
                     <Image
                       src="/images/jsn-darnold.webp"
-                      alt="Jaxon Smith-Njigba"
+                      alt="Jaxon Smith-Njigba & Sam Darnold"
                       width={300}
                       height={400}
                       className="relative w-full h-52 rounded-xl object-cover object-top border-2 border-seahawks-green/40 shadow-[0_4px_20px_hsla(152,85%,45%,0.15)]"
                     />
-                    <Image
-                      src="/images/seahawks-logo.png"
-                      alt="Seahawks"
-                      width={40}
-                      height={40}
-                      className="absolute -bottom-2 -right-2 w-10 h-10 rounded-full object-cover border-2 border-background shadow-lg ring-1 ring-seahawks-green/30"
-                    />
+                    {/* Logo badge removed per request */}
                   </div>
                   <p className="font-display text-xl uppercase tracking-wider text-seahawks-green">
                     Seahawks
@@ -272,13 +254,7 @@ export default function Page() {
                       height={400}
                       className="relative w-full h-52 rounded-xl object-cover object-top border-2 border-patriots-red/40 shadow-[0_4px_20px_hsla(0,80%,55%,0.15)]"
                     />
-                    <Image
-                      src="/images/patriots-logo.png"
-                      alt="Patriots"
-                      width={40}
-                      height={40}
-                      className="absolute -bottom-2 -left-2 w-10 h-10 rounded-full object-cover border-2 border-background shadow-lg ring-1 ring-patriots-red/30"
-                    />
+                    {/* Logo badge removed per request */}
                   </div>
                   <p className="font-display text-xl uppercase tracking-wider text-patriots-red">
                     Patriots
@@ -316,31 +292,57 @@ export default function Page() {
         {/* ===== SCOREBOARD PAYOUTS ===== */}
         <section className="relative w-full py-6 sm:py-14">
           <div className="w-full px-3 sm:px-8 lg:px-16">
-            <div className="flex items-center justify-center gap-3 mb-4 sm:mb-8">
+            <div className="flex items-center justify-center gap-3 mb-2 sm:mb-4">
               <div className="h-px flex-1 max-w-[60px] sm:max-w-[100px] bg-gradient-to-r from-transparent to-white/10" />
               <h2 className="font-display text-lg sm:text-2xl lg:text-3xl uppercase tracking-[0.2em] sm:tracking-[0.3em] text-white/60">
                 Payouts
               </h2>
               <div className="h-px flex-1 max-w-[60px] sm:max-w-[100px] bg-gradient-to-l from-transparent to-white/10" />
             </div>
-            <div className="grid grid-cols-4 gap-2 sm:gap-4 lg:gap-6 max-w-4xl mx-auto">
+            <div className="flex flex-col items-center justify-center gap-2 mb-4 sm:mb-8">
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs sm:text-sm uppercase tracking-[0.25em] text-sb-cyan/80">
+                Cost <span className="text-white/40">·</span> <span className="font-display text-white">$1</span> <span className="text-white/40">/ box</span>
+              </span>
+              <p className="text-xs sm:text-sm uppercase tracking-[0.2em] text-white/45 text-center">
+                To be approved, payment must be made to{" "}
+                <span className="text-white/70">Vijay Patel</span>{" "}
+                <span className="text-white/25">·</span>{" "}
+                <a
+                  href="https://venmo.com/u/vijay_patel"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-sb-cyan/80 hover:text-sb-cyan underline-offset-4 hover:underline"
+                >
+                  @vijay_patel
+                </a>
+              </p>
+            </div>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-1 sm:gap-4 lg:gap-6 max-w-4xl mx-auto">
               {(["q1", "q2", "q3", "final"] as const).map((q, i) => (
                 <div
                   key={q}
-                  className="scoreboard-card rounded-lg sm:rounded-2xl p-2.5 sm:p-6 text-center relative overflow-hidden group"
+                  className={`scoreboard-card rounded-lg sm:rounded-2xl p-2 sm:p-5 text-center relative overflow-hidden group aspect-square w-full flex items-center justify-center ${
+                    q === "final" ? "sm:scale-[1.1] lg:scale-[1.12] z-10 ring-1 ring-sb-cyan/20" : ""
+                  }`}
                 >
                   {q === "final" && (
                     <div className="absolute inset-0 bg-gradient-to-br from-sb-cyan/5 via-transparent to-sb-magenta/5 pointer-events-none" />
                   )}
-                  <div className="relative">
-                    <div className="text-[8px] sm:text-xs uppercase tracking-[0.15em] sm:tracking-[0.25em] text-white/40 mb-1 sm:mb-3 font-medium">
+                  <div className="relative flex flex-col items-center justify-center">
+                    <div className="text-[11px] sm:text-base uppercase tracking-[0.15em] sm:tracking-[0.25em] text-white/40 mb-1 sm:mb-3 font-medium">
                       {payoutLabels[q]}
                     </div>
-                    <div className="font-display text-xl sm:text-4xl lg:text-5xl text-white">
+                    <div
+                      className={`font-display text-white ${
+                        q === "final" ? "text-4xl sm:text-6xl lg:text-7xl" : "text-3xl sm:text-4xl lg:text-5xl"
+                      }`}
+                    >
                       ${data.table.payouts[q]}
                     </div>
                     {q === "final" && (
-                      <div className="mt-1 sm:mt-2 text-[8px] sm:text-[10px] uppercase tracking-widest text-sb-cyan/60">Grand Prize</div>
+                      <div className="mt-1 sm:mt-2 text-base sm:text-lg uppercase tracking-widest text-sb-cyan/70">
+                        Grand Prize
+                      </div>
                     )}
                   </div>
                 </div>
@@ -354,6 +356,11 @@ export default function Page() {
         {/* ===== GRID SECTION — WIDE ===== */}
         <section className="relative w-full py-6 sm:py-14">
           <div className="w-full px-2 sm:px-6 lg:px-12">
+            {/* How it works */}
+            <div className="mb-6 sm:mb-10 px-3 sm:px-8 lg:px-16 max-w-5xl mx-auto">
+              <RulesSection customRules={data.table.rules} />
+            </div>
+
             {/* Grid stats */}
             <div className="mb-4 sm:mb-8 px-1 sm:px-0">
               <GridStats />
@@ -364,19 +371,10 @@ export default function Page() {
           </div>
         </section>
 
-        <div className="section-divider w-full" />
-
-        {/* ===== RULES ===== */}
-        <section className="w-full py-6 sm:py-14">
-          <div className="w-full px-3 sm:px-8 lg:px-16 max-w-5xl mx-auto">
-            <RulesSection customRules={data.table.rules} />
-          </div>
-        </section>
-
         {/* ===== STICKY CHECKOUT ===== */}
         <div className="sticky bottom-0 z-30 w-full pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-3 sm:pt-4 bg-gradient-to-t from-background via-background/95 to-transparent">
           <div className="w-full px-3 sm:px-8 lg:px-16 max-w-3xl mx-auto">
-            <CheckoutPanel />
+            <CheckoutPanel pricePerBox={data.table.pricePerBox} />
           </div>
         </div>
 
