@@ -144,7 +144,7 @@ export function SquaresGrid() {
             {/* Main grid area */}
             <div className="flex">
               {/* Row numbers column */}
-              <div className="grid grid-rows-[repeat(10,1fr)] gap-[3px] sm:gap-1.5 lg:gap-1.5 w-5 sm:w-8 lg:w-8">
+              <div className="grid grid-rows-[repeat(10,1fr)] gap-[3px] sm:gap-1.5 lg:gap-1.5 w-5 sm:w-8 lg:w-8 -translate-x-2.5 sm:-translate-x-3.5 lg:-translate-x-3.5">
                 {Array.from({ length: 10 }).map((_, i) => (
                   <div
                     key={`row-${i}`}
@@ -158,7 +158,7 @@ export function SquaresGrid() {
               </div>
 
               {/* 10x10 Grid */}
-              <div className="flex-1 grid grid-cols-10 gap-[3px] sm:gap-1.5 lg:gap-1.5 ml-[3px] sm:ml-1.5 lg:ml-1.5">
+              <div className="flex-1 grid grid-cols-10 gap-[3px] sm:gap-1.5 lg:gap-1.5 ml-2 sm:ml-2 lg:ml-2">
                 {boxes.map((box) => (
                   <GridCell
                     key={box.id}
