@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils"
 import Image from "next/image"
 import Link from "next/link"
 import { useMemo } from "react"
+import { CountdownTimer } from "@/components/countdown-timer"
 
 function StatusBadge({ status }: { status: "pending" | "confirmed" }) {
   return (
@@ -90,8 +91,16 @@ function ClaimRow({
   )
 }
 
-export function AdminDashboard() {
-  const { boxes, confirmBox, rejectBox, confirmAll } = useGame()
+export function AdminDashboard({
+  tableCode,
+  tableName,
+  kickoffAt,
+}: {
+  tableCode: string
+  tableName: string
+  kickoffAt: number
+}) {
+  const { boxes, confirmBox, rejectBox, confirmAll, tableLocked, lockReason, refreshState, adminKey } = useGame()
 
   // Group boxes by owner and status
   const claims = useMemo(() => {
@@ -120,6 +129,7 @@ export function AdminDashboard() {
   const totalPending = pendingClaims.reduce((sum, c) => sum + c.squareIds.length, 0)
   const totalConfirmed = confirmedClaims.reduce((sum, c) => sum + c.squareIds.length, 0)
   const totalAvailable = boxes.filter((b) => b.status === "available").length
+  const revealAt = kickoffAt - 5 * 60 * 1000
 
   return (
     <main className="min-h-screen flex flex-col">
@@ -136,19 +146,27 @@ export function AdminDashboard() {
             />
             <div>
               <h1 className="font-display text-lg sm:text-xl font-black text-foreground uppercase tracking-tight">
-                Admin Panel
+                {tableName}
               </h1>
               <p className="text-muted-foreground text-xs">
-                Super Bowl Squares Management
+                Admin Panel • Table {tableCode}
               </p>
             </div>
           </div>
-          <Link
-            href="/"
-            className="text-sm text-muted-foreground hover:text-foreground transition-colors underline underline-offset-4 min-h-[44px] flex items-center"
-          >
-            Back to game
-          </Link>
+          <div className="flex items-center gap-3">
+            <Link
+              href={`/t/${tableCode}`}
+              className="text-sm text-muted-foreground hover:text-foreground transition-colors underline underline-offset-4 min-h-[44px] flex items-center"
+            >
+              Back to table
+            </Link>
+            <Link
+              href="/tables"
+              className="text-xs text-muted-foreground hover:text-foreground transition-colors"
+            >
+              My tables
+            </Link>
+          </div>
         </div>
       </header>
 
@@ -172,6 +190,48 @@ export function AdminDashboard() {
 
       {/* Content */}
       <div className="flex-1 px-4 sm:px-6 py-6 max-w-3xl mx-auto w-full">
+        {/* Lock + Countdown */}
+        <section className="mb-6">
+          <div className="bg-card border border-border rounded-lg p-4 flex flex-col gap-4">
+            <div className="flex items-center justify-between gap-3">
+              <div>
+                <p className="font-display text-sm font-bold uppercase tracking-wider text-foreground">
+                  Table Status
+                </p>
+                <p className="text-muted-foreground text-xs mt-1">
+                  {tableLocked
+                    ? `Locked (${lockReason ?? "manual"})`
+                    : "Open for new selections"}
+                </p>
+              </div>
+              <Button
+                size="sm"
+                onClick={async () => {
+                  if (!adminKey) return
+                  await fetch(`/api/tables/${tableCode}/admin/lock`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                      status: tableLocked ? "open" : "locked",
+                      adminKey,
+                    }),
+                  })
+                  refreshState?.()
+                }}
+                className={cn(
+                  "h-9 px-4 text-xs font-display font-bold uppercase tracking-wide",
+                  tableLocked
+                    ? "bg-seahawks-green hover:bg-seahawks-green/90 text-white"
+                    : "bg-patriots-red hover:bg-patriots-red/90 text-white"
+                )}
+              >
+                {tableLocked ? "Unlock" : "Lock"}
+              </Button>
+            </div>
+            <CountdownTimer revealAt={revealAt} showRevealButton />
+          </div>
+        </section>
+
         {/* Pending section */}
         {pendingClaims.length > 0 && (
           <section className="mb-8">
@@ -246,7 +306,7 @@ export function AdminDashboard() {
               Claims will appear here as people select squares on the main page.
             </p>
             <p className="text-muted-foreground/40 text-xs mt-4">
-              Note: Data will sync across pages once Upstash Redis is connected.
+              Note: Data is stored locally on this device. Share the same browser to manage claims.
             </p>
           </div>
         )}

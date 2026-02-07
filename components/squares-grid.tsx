@@ -1,6 +1,7 @@
 "use client"
 
-import { useGame, type BoxStatus } from "@/lib/game-context"
+import { useGame } from "@/lib/game-context"
+import type { BoxStatus } from "@/lib/game-types"
 import { cn } from "@/lib/utils"
 import Image from "next/image"
 
