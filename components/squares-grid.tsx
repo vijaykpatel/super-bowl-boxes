@@ -94,14 +94,14 @@ export function SquaresGrid() {
   const { boxes, selectedBoxIds, toggleBox, rowNumbers, colNumbers, numbersRevealed } = useGame()
 
   return (
-    <div className="w-full max-w-[900px] mx-auto grid-shell rounded-2xl sm:rounded-3xl p-3 sm:p-5 lg:p-8">
+    <div className="w-full max-w-[780px] mx-auto grid-shell rounded-2xl sm:rounded-3xl p-3 sm:p-5 lg:p-6">
       {/* Top: Patriots header centered over grid columns */}
       <div className="flex">
         {/* Spacer matching left columns (branding + numbers) */}
-        <div className="shrink-0 w-[56px] sm:w-[96px] lg:w-[112px]" />
+        <div className="shrink-0 w-[56px] sm:w-[96px] lg:w-[96px]" />
         {/* Patriots header */}
         <div className="flex-1 flex items-center justify-center gap-2 sm:gap-3 pb-2 sm:pb-4">
-          <span className="font-display text-sm sm:text-xl lg:text-2xl uppercase tracking-[0.2em] text-patriots-red/90 font-bold">
+          <span className="font-display text-sm sm:text-xl lg:text-xl uppercase tracking-[0.2em] text-patriots-red/90 font-bold">
             Patriots
           </span>
         </div>
@@ -109,11 +109,11 @@ export function SquaresGrid() {
 
       {/* Column numbers row */}
       <div className="flex">
-        <div className="shrink-0 w-[56px] sm:w-[96px] lg:w-[112px]" />
-        <div className="flex-1 grid grid-cols-10 gap-[3px] sm:gap-1.5 lg:gap-2 mb-[3px] sm:mb-1.5 lg:mb-2">
+        <div className="shrink-0 w-[56px] sm:w-[96px] lg:w-[96px]" />
+        <div className="flex-1 grid grid-cols-10 gap-[3px] sm:gap-1.5 lg:gap-1.5 mb-[3px] sm:mb-1.5 lg:mb-1.5">
           {Array.from({ length: 10 }).map((_, i) => (
             <div key={`col-${i}`} className="flex items-center justify-center">
-              <span className="text-xs sm:text-base lg:text-lg font-display text-patriots-red tabular-nums font-bold">
+              <span className="text-xs sm:text-base lg:text-base font-display text-patriots-red tabular-nums font-bold">
                 {numbersRevealed && colNumbers ? colNumbers[i] : "?"}
               </span>
             </div>
@@ -126,10 +126,10 @@ export function SquaresGrid() {
         {/* Left: Seahawks branding (logo + vertical name) then row numbers */}
         <div className="shrink-0 flex">
           {/* Seahawks branding column — logo + vertical text, centered vertically */}
-          <div className="flex flex-col items-center justify-center w-8 sm:w-12 lg:w-14 mr-1 sm:mr-2">
+          <div className="flex flex-col items-center justify-center w-8 sm:w-12 lg:w-12 mr-1 sm:mr-2">
             <div className="flex flex-col items-center gap-0 leading-none">
               {"SEAHAWKS".split("").map((letter, i) => (
-                <span key={i} className="font-display text-base sm:text-2xl lg:text-3xl text-seahawks-green/90 font-bold">
+                <span key={i} className="font-display text-base sm:text-2xl lg:text-2xl text-seahawks-green/90 font-bold">
                   {letter}
                 </span>
               ))}
@@ -137,13 +137,13 @@ export function SquaresGrid() {
           </div>
 
           {/* Row numbers column */}
-          <div className="grid grid-rows-[repeat(10,1fr)] gap-[3px] sm:gap-1.5 lg:gap-2 w-5 sm:w-8 lg:w-10">
+          <div className="grid grid-rows-[repeat(10,1fr)] gap-[3px] sm:gap-1.5 lg:gap-1.5 w-5 sm:w-8 lg:w-8">
             {Array.from({ length: 10 }).map((_, i) => (
               <div
                 key={`row-${i}`}
                 className="flex items-center justify-center aspect-square"
               >
-                <span className="text-sm sm:text-lg lg:text-xl font-display text-seahawks-green tabular-nums font-bold">
+                <span className="text-sm sm:text-lg lg:text-lg font-display text-seahawks-green tabular-nums font-bold">
                   {numbersRevealed && rowNumbers ? rowNumbers[i] : "?"}
                 </span>
               </div>
@@ -152,7 +152,7 @@ export function SquaresGrid() {
         </div>
 
         {/* 10x10 Grid */}
-        <div className="flex-1 grid grid-cols-10 gap-[3px] sm:gap-1.5 lg:gap-2 ml-[3px] sm:ml-1.5 lg:ml-2">
+        <div className="flex-1 grid grid-cols-10 gap-[3px] sm:gap-1.5 lg:gap-1.5 ml-[3px] sm:ml-1.5 lg:ml-1.5">
           {boxes.map((box) => (
             <GridCell
               key={box.id}
