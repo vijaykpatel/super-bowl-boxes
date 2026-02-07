@@ -46,18 +46,18 @@ export function RulesSection({ customRules }: { customRules?: string }) {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
-    <div className="w-full max-w-3xl mx-auto">
+    <div className="w-full">
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center justify-between px-6 py-4 glass-panel rounded-2xl hover:bg-white/5 transition-all"
+        className="w-full flex items-center justify-between px-6 py-4 glass-panel rounded-xl sm:rounded-2xl hover:bg-white/[0.03] transition-all group"
       >
-        <span className="font-display text-lg sm:text-xl uppercase tracking-wider text-foreground">
+        <span className="font-display text-lg sm:text-xl uppercase tracking-[0.15em] text-foreground">
           How It Works
         </span>
         <svg
           className={cn(
-            "w-6 h-6 sm:w-7 sm:h-7 text-muted-foreground transition-transform duration-200",
+            "w-5 h-5 sm:w-6 sm:h-6 text-white/30 transition-transform duration-300 group-hover:text-white/50",
             isOpen && "rotate-180"
           )}
           fill="none"
@@ -74,22 +74,22 @@ export function RulesSection({ customRules }: { customRules?: string }) {
       </button>
 
       {isOpen && (
-        <div className="mt-4 glass-panel rounded-2xl p-6 sm:p-8 shadow-xl">
+        <div className="mt-3 glass-panel rounded-xl sm:rounded-2xl p-5 sm:p-8">
           <div className="flex flex-col gap-6">
             {customRules && (
-              <div className="rounded-xl border border-white/10 bg-white/5 p-5 text-base sm:text-lg text-muted-foreground whitespace-pre-wrap shadow-inner">
+              <div className="rounded-xl border border-white/[0.08] bg-white/[0.02] p-4 sm:p-5 text-sm sm:text-base text-muted-foreground whitespace-pre-wrap">
                 {customRules}
               </div>
             )}
             {rules.map((rule) => (
               <div key={rule.step} className="flex gap-4">
-                <div className="shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-patriots-red/20 border border-patriots-red/40 flex items-center justify-center shadow-lg">
-                  <span className="font-display text-lg sm:text-xl text-patriots-red">
+                <div className="shrink-0 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-sb-cyan/10 border border-sb-cyan/25 flex items-center justify-center">
+                  <span className="font-display text-sm sm:text-base text-sb-cyan">
                     {rule.step}
                   </span>
                 </div>
-                <div>
-                  <h4 className="font-display text-base sm:text-lg text-foreground uppercase tracking-tight mb-2">
+                <div className="pt-0.5">
+                  <h4 className="font-display text-base sm:text-lg text-foreground uppercase tracking-tight mb-1">
                     {rule.title}
                   </h4>
                   <p className="text-muted-foreground text-sm sm:text-base leading-relaxed">
