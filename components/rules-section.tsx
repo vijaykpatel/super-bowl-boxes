@@ -8,7 +8,7 @@ const rules = [
     step: "1",
     title: "Pick Your Squares",
     description:
-      "Tap any available square on the 10x10 grid. You can select as many as you want.",
+      "Tap any available square on the 10x10 grid. Limit 2 squares per player name.",
   },
   {
     step: "2",

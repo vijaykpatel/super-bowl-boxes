@@ -28,6 +28,11 @@ type StoreState = {
 }
 
 const STORE_KEY = "game:state"
+const MAX_BOXES_PER_PLAYER = 2
+
+function normalizeName(name: string) {
+  return name.trim().toLowerCase()
+}
 
 function createInitialState(): StoreState {
   return {
@@ -96,6 +101,19 @@ export async function claimBoxes(playerName: string, boxIds: number[]) {
   applyAutoRules(next)
   if (next.lock.status === "locked") {
     return { ok: false, error: "Table locked" }
+  }
+  const normalized = normalizeName(playerName)
+  const existingCount = next.state.boxes.filter(
+    (box) =>
+      box.owner &&
+      normalizeName(box.owner) === normalized &&
+      (box.status === "pending" || box.status === "confirmed")
+  ).length
+  if (existingCount >= MAX_BOXES_PER_PLAYER) {
+    return { ok: false, error: "Max limit reached" }
+  }
+  if (existingCount + boxIds.length > MAX_BOXES_PER_PLAYER) {
+    return { ok: false, error: "Max limit reached" }
   }
   const idSet = new Set(boxIds)
   const updated = next.state.boxes.map((box) => {

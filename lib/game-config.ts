@@ -14,6 +14,7 @@ export const GAME_CONFIG = {
   customRules: [
     "Box value is $5.",
     "Payouts are Q1 $100, Q2 $100, Q3 $100, Final $200.",
+    "Limit 2 boxes per player name.",
     "Squares are pending until I confirm payment.",
   ].join("\n"),
 }

@@ -125,7 +125,7 @@ export function SquaresGrid() {
         </div>
 
         {/* Card wrapper with centered grid */}
-        <div className="flex-1 grid-shell rounded-2xl sm:rounded-3xl p-2.5 sm:p-4 lg:p-5">
+        <div className="flex-1 grid-shell rounded-2xl sm:rounded-3xl p-2 sm:p-3 lg:p-4">
           <div className="w-full max-w-[740px] mx-auto">
             {/* Column numbers row */}
             <div className="flex">
@@ -173,7 +173,7 @@ export function SquaresGrid() {
             </div>
 
             {/* Legend */}
-            <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-6 mt-3 sm:mt-4 pt-3 sm:pt-4 pb-2 sm:pb-3 border-t border-white/[0.06] text-sm sm:text-base lg:text-lg text-white/40">
+            <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-6 mt-3 sm:mt-4 pt-3 border-t border-white/[0.06] text-sm sm:text-base lg:text-lg text-white/40">
               <div className="flex items-center gap-1.5">
                 <div className="w-3 h-3 rounded bg-white/[0.03] border border-white/[0.06]" />
                 <span>Available</span>

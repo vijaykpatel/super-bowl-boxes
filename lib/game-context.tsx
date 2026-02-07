@@ -26,7 +26,7 @@ type GameContextType = {
   toggleBox: (id: number) => void
   setPlayerName: (name: string) => void
   setGamePhase: (phase: GamePhase) => void
-  submitSelection: () => void
+  submitSelection: () => Promise<string | null>
   clearSelection: () => void
   revealNumbers: () => void
   confirmBox: (id: number) => void
@@ -42,6 +42,7 @@ const GameContext = createContext<GameContextType | undefined>(undefined)
 
 const STORAGE_KEY = "super-bowl-boxes-state"
 const STORAGE_VERSION = 1
+const MAX_BOXES_PER_PLAYER = 2
 
 type StoredGameState = {
   version: number
@@ -134,7 +135,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
         const next = new Set(prev)
         if (next.has(id)) {
           next.delete(id)
-        } else {
+        } else if (next.size < MAX_BOXES_PER_PLAYER) {
           next.add(id)
         }
         return next
@@ -143,8 +144,9 @@ export function GameProvider({ children }: { children: ReactNode }) {
     [boxes, gamePhase]
   )
 
-  const submitSelection = useCallback(() => {
-    if (selectedBoxIds.size === 0 || !playerName.trim()) return
+  const submitSelection = useCallback(async () => {
+    if (selectedBoxIds.size === 0 || !playerName.trim()) return "Missing selection"
+    if (selectedBoxIds.size > MAX_BOXES_PER_PLAYER) return "Max limit reached"
     setBoxes((prev) =>
       prev.map((box) =>
         selectedBoxIds.has(box.id)
@@ -156,6 +158,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
     setPlayerName("")
     setGamePhase("submitted")
     setTimeout(() => setGamePhase("selecting"), 3000)
+    return null
   }, [selectedBoxIds, playerName])
 
   const clearSelection = useCallback(() => {
@@ -308,7 +311,7 @@ export function ServerGameProvider({ children, initialState, initialLock, adminP
         const next = new Set(prev)
         if (next.has(id)) {
           next.delete(id)
-        } else {
+        } else if (next.size < MAX_BOXES_PER_PLAYER) {
           next.add(id)
         }
         return next
@@ -319,7 +322,8 @@ export function ServerGameProvider({ children, initialState, initialLock, adminP
 
   const submitSelection = useCallback(async () => {
     if (tableLocked) return
-    if (selectedBoxIds.size === 0 || !playerName.trim()) return
+    if (selectedBoxIds.size === 0 || !playerName.trim()) return "Missing selection"
+    if (selectedBoxIds.size > MAX_BOXES_PER_PLAYER) return "Max limit reached"
     const res = await fetch(`/api/claim`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -328,12 +332,20 @@ export function ServerGameProvider({ children, initialState, initialLock, adminP
         boxIds: Array.from(selectedBoxIds),
       }),
     })
-    if (!res.ok) return
+    if (!res.ok) {
+      try {
+        const data = await res.json()
+        return data?.error ?? "Unable to submit"
+      } catch {
+        return "Unable to submit"
+      }
+    }
     setSelectedBoxIds(new Set())
     setPlayerName("")
     setGamePhase("submitted")
     setTimeout(() => setGamePhase("selecting"), 3000)
     refreshState()
+    return null
   }, [playerName, refreshState, selectedBoxIds, tableLocked])
 
   const clearSelection = useCallback(() => {

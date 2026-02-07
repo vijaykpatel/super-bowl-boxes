@@ -1,5 +1,6 @@
 "use client"
 
+import { useState } from "react"
 import { useGame } from "@/lib/game-context"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -16,6 +17,7 @@ export function CheckoutPanel({ pricePerBox }: { pricePerBox: number }) {
     clearSelection,
     tableLocked,
   } = useGame()
+  const [error, setError] = useState<string | null>(null)
 
   const count = selectedBoxIds.size
   const total = count * pricePerBox
@@ -117,6 +119,11 @@ export function CheckoutPanel({ pricePerBox }: { pricePerBox: number }) {
               className="bg-white/[0.04] border border-white/[0.1] text-foreground placeholder:text-muted-foreground h-13 text-base sm:text-lg rounded-xl focus:border-sb-cyan/50 focus:ring-sb-cyan/20"
               autoFocus
             />
+            {error && (
+              <p className="text-sm sm:text-base text-destructive">
+                {error}
+              </p>
+            )}
             <div className="flex gap-3">
               <Button
                 variant="outline"
@@ -126,7 +133,17 @@ export function CheckoutPanel({ pricePerBox }: { pricePerBox: number }) {
                 Cancel
               </Button>
               <Button
-                onClick={submitSelection}
+                onClick={async () => {
+                  setError(null)
+                  const result = await submitSelection()
+                  if (result) {
+                    if (result === "Max limit reached") {
+                      setError("You already hit the 2-box limit for this name.")
+                      return
+                    }
+                    setError(result)
+                  }
+                }}
                 disabled={!playerName.trim()}
                 className={cn(
                   "flex-1 h-13 font-display uppercase tracking-wider text-base sm:text-lg rounded-xl transition-all",

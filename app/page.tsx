@@ -67,10 +67,10 @@ export default function Page() {
 
   return (
     <ServerGameProvider initialState={data.state} initialLock={data.table.lock}>
-      <main className="min-h-screen flex flex-col bg-background overflow-x-hidden">
+      <main className="min-h-screen flex flex-col bg-background">
 
         {/* ===== BROADCAST STATUS BAR ===== */}
-        <div className="relative z-20 w-full border-b border-white/[0.06] bg-background/80 backdrop-blur-md">
+        <div className="sticky top-0 z-40 w-full border-b border-white/[0.06] bg-background/90 backdrop-blur-md shadow-[0_8px_20px_rgba(0,0,0,0.25)]">
           <div className="w-full px-4 sm:px-8 py-2.5 flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="flex items-center gap-2">
@@ -81,10 +81,13 @@ export default function Page() {
                 {isLocked ? "Locked" : "Live"}
               </span>
             </div>
-            <div className="flex items-center gap-2 text-xs sm:text-sm text-white/40">
-              <span className="hidden sm:inline uppercase tracking-wider">Super Bowl LIX</span>
-              <span className="hidden sm:inline text-white/15">|</span>
-              <span className="font-display text-lg sm:text-xl text-sb-cyan">${data.table.pricePerBox}<span className="text-white/30 text-sm">/box</span></span>
+            <div className="flex flex-col sm:flex-row sm:items-center gap-0.5 sm:gap-2 text-[11px] sm:text-sm text-white/40 text-center sm:text-left">
+              <div className="flex items-center justify-center sm:justify-start gap-2">
+                <span className="hidden sm:inline uppercase tracking-wider">Super Bowl LIX</span>
+                <span className="hidden sm:inline text-white/15">|</span>
+                <span className="font-display text-base sm:text-xl text-sb-cyan">${data.table.pricePerBox}<span className="text-white/30 text-xs sm:text-sm">/box</span></span>
+              </div>
+              <span className="uppercase tracking-wider text-white/55">2 boxes max per person</span>
             </div>
             <Image
               src="/images/nfl-logo.png"
@@ -371,8 +374,8 @@ export default function Page() {
           </div>
         </section>
 
-        {/* ===== STICKY CHECKOUT ===== */}
-        <div className="sticky bottom-0 z-30 w-full pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-3 sm:pt-4 bg-gradient-to-t from-background via-background/95 to-transparent">
+        {/* ===== CHECKOUT ===== */}
+        <div className="w-full pb-4 sm:pb-6 pt-3 sm:pt-4">
           <div className="w-full px-3 sm:px-8 lg:px-16 max-w-3xl mx-auto">
             <CheckoutPanel pricePerBox={data.table.pricePerBox} />
           </div>
