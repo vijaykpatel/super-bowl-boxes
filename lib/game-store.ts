@@ -131,8 +131,12 @@ export async function rejectBoxes(boxIds: number[]) {
   next.state = {
     ...next.state,
     boxes: next.state.boxes.map((box) =>
-      idSet.has(box.id) && box.status === "pending"
-        ? { ...box, owner: null, status: "available" }
+      idSet.has(box.id)
+        ? box.status === "pending"
+          ? { ...box, owner: null, status: "available" }
+          : box.status === "confirmed"
+            ? { ...box, status: "pending" }
+            : box
         : box
     ),
     updatedAt: Date.now(),

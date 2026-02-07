@@ -5,12 +5,14 @@ import { Button } from "@/components/ui/button"
 import Image from "next/image"
 import { useEffect, useMemo, useState } from "react"
 import { CountdownTimer } from "@/components/countdown-timer"
+import { cn } from "@/lib/utils"
+import Link from "next/link"
 
 function StatusBadge({ status }: { status: "pending" | "confirmed" }) {
   return (
     <span
       className={cn(
-        "inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium",
+        "inline-flex items-center px-3 py-1.5 rounded-full text-base font-semibold",
         status === "pending" && "bg-pending/15 text-pending border border-pending/30",
         status === "confirmed" && "bg-patriots-red/15 text-patriots-red border border-patriots-red/30"
       )}
@@ -40,15 +42,15 @@ function ClaimRow({
   onReject: () => void
 }) {
   return (
-    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 bg-card border border-border rounded-lg">
+    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-5 p-5 sm:p-6 bg-card border border-border rounded-xl">
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 mb-1">
-          <p className="font-display font-bold text-foreground text-base truncate">
+          <p className="font-sans font-semibold text-foreground text-xl sm:text-2xl truncate">
             {owner}
           </p>
           <StatusBadge status={status} />
         </div>
-        <p className="text-muted-foreground text-xs">
+        <p className="text-muted-foreground text-base">
           {squareIds.length} {squareIds.length === 1 ? "square" : "squares"}:{" "}
           <span className="text-foreground/70">
             {squareIds.map((id) => {
@@ -60,37 +62,39 @@ function ClaimRow({
         </p>
       </div>
 
-      <div className="flex flex-col sm:flex-row gap-2 shrink-0 items-stretch sm:items-center">
-        {status === "pending" && (
+      <div className="flex flex-col sm:flex-row gap-4 shrink-0 items-stretch sm:items-center">
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={onDecrement}
+            className="h-12 w-12 rounded-full border border-border text-foreground hover:bg-secondary transition-all text-xl"
+            aria-label={status === "pending" ? "Decrease approved count" : "Decrease revoke count"}
+          >
+            -
+          </button>
+          <div className="min-w-[70px] text-center">
+            <p className="text-sm uppercase tracking-[0.25em] text-muted-foreground">
+              {status === "pending" ? "Approve" : "Revoke"}
+            </p>
+            <p className="font-display text-2xl text-foreground">
+              {count ?? squareIds.length}
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={onIncrement}
+            className="h-12 w-12 rounded-full border border-border text-foreground hover:bg-secondary transition-all text-xl"
+            aria-label={status === "pending" ? "Increase approved count" : "Increase revoke count"}
+          >
+            +
+          </button>
+        </div>
+        {status === "pending" ? (
           <>
-            <div className="flex items-center gap-2">
-              <button
-                type="button"
-                onClick={onDecrement}
-                className="h-10 w-10 rounded-full border border-border text-foreground hover:bg-secondary transition-all"
-                aria-label="Decrease approved count"
-              >
-                -
-              </button>
-              <div className="min-w-[70px] text-center">
-                <p className="text-xs uppercase tracking-widest text-muted-foreground">Approve</p>
-                <p className="font-display text-lg text-foreground">
-                  {count ?? squareIds.length}
-                </p>
-              </div>
-              <button
-                type="button"
-                onClick={onIncrement}
-                className="h-10 w-10 rounded-full border border-border text-foreground hover:bg-secondary transition-all"
-                aria-label="Increase approved count"
-              >
-                +
-              </button>
-            </div>
             <Button
               size="sm"
               onClick={onConfirm}
-              className="bg-seahawks-green hover:bg-seahawks-green/90 text-white font-display font-bold uppercase tracking-wide h-10 px-4 min-w-[100px]"
+              className="bg-seahawks-green hover:bg-seahawks-green/90 text-white font-display font-bold uppercase tracking-wide h-12 px-6 min-w-[140px] text-base"
             >
               Confirm {count ?? squareIds.length}
             </Button>
@@ -98,20 +102,19 @@ function ClaimRow({
               variant="outline"
               size="sm"
               onClick={onReject}
-              className="border-destructive/50 text-destructive hover:bg-destructive/10 bg-transparent h-10 px-4 min-w-[100px]"
+              className="border-destructive/50 text-destructive hover:bg-destructive/10 bg-transparent h-12 px-6 min-w-[140px] text-base"
             >
               Reject {count ?? squareIds.length}
             </Button>
           </>
-        )}
-        {status === "confirmed" && (
+        ) : (
           <Button
             variant="outline"
             size="sm"
             onClick={onReject}
-            className="border-border text-muted-foreground hover:text-foreground hover:bg-secondary bg-transparent h-10 px-4"
+            className="border-border text-muted-foreground hover:text-foreground hover:bg-secondary bg-transparent h-12 px-6 min-w-[140px] text-base"
           >
-            Revoke
+            Revoke {count ?? squareIds.length}
           </Button>
         )}
       </div>
@@ -157,6 +160,7 @@ export function AdminDashboard({
   const totalAvailable = boxes.filter((b) => b.status === "available").length
   const revealAt = kickoffAt - 5 * 60 * 1000
   const [approveCounts, setApproveCounts] = useState<Record<string, number>>({})
+  const [revokeCounts, setRevokeCounts] = useState<Record<string, number>>({})
 
   useEffect(() => {
     setApproveCounts((prev) => {
@@ -177,57 +181,82 @@ export function AdminDashboard({
     })
   }, [pendingClaims])
 
+  useEffect(() => {
+    setRevokeCounts((prev) => {
+      const next: Record<string, number> = {}
+      for (const claim of confirmedClaims) {
+        const key = `${claim.owner}-confirmed`
+        const max = claim.squareIds.length
+        const current = prev[key]
+        next[key] = current ? Math.min(current, max) : Math.min(1, max)
+      }
+      const prevKeys = Object.keys(prev)
+      const nextKeys = Object.keys(next)
+      if (prevKeys.length !== nextKeys.length) return next
+      for (const key of nextKeys) {
+        if (prev[key] !== next[key]) return next
+      }
+      return prev
+    })
+  }, [confirmedClaims])
+
   return (
-    <main className="min-h-screen flex flex-col">
+    <main className="min-h-screen flex flex-col bg-background">
       {/* Header */}
       <header className="border-b border-border bg-card">
-        <div className="flex items-center justify-between px-4 py-4 sm:px-6 max-w-3xl mx-auto w-full">
+        <div className="flex items-center justify-between px-4 py-5 sm:px-6 max-w-3xl mx-auto w-full">
           <div className="flex items-center gap-3">
             <Image
               src="/images/hero-stadium.jpg"
               alt="Super Bowl"
               width={40}
               height={40}
-              className="rounded-lg object-cover w-10 h-10"
+              className="rounded-lg object-cover w-12 h-12"
             />
             <div>
-              <h1 className="font-display text-lg sm:text-xl font-black text-foreground uppercase tracking-tight">
+              <h1 className="font-display text-2xl sm:text-3xl font-black text-foreground uppercase tracking-tight">
                 {tableName}
               </h1>
-              <p className="text-muted-foreground text-xs">
+              <p className="text-muted-foreground text-base">
                 Admin Panel
               </p>
             </div>
           </div>
+          <Link
+            href="/"
+            className="inline-flex items-center h-11 px-5 rounded-lg border border-border bg-background text-foreground text-lg font-medium hover:bg-secondary transition-colors"
+          >
+            Back to Table
+          </Link>
         </div>
       </header>
 
       {/* Stats overview */}
-      <div className="px-4 sm:px-6 pt-6 max-w-3xl mx-auto w-full">
-        <div className="grid grid-cols-3 gap-3">
-          <div className="bg-card border border-border rounded-lg p-3 text-center">
-            <p className="font-display text-2xl font-bold text-pending">{totalPending}</p>
-            <p className="text-muted-foreground text-xs mt-0.5">Pending</p>
+      <div className="px-4 sm:px-6 pt-7 max-w-3xl mx-auto w-full">
+        <div className="grid grid-cols-3 gap-4">
+          <div className="bg-card border border-border rounded-xl p-5 text-center">
+            <p className="font-display text-4xl font-bold text-pending">{totalPending}</p>
+            <p className="text-muted-foreground text-base mt-0.5">Pending</p>
           </div>
-          <div className="bg-card border border-border rounded-lg p-3 text-center">
-            <p className="font-display text-2xl font-bold text-patriots-red">{totalConfirmed}</p>
-            <p className="text-muted-foreground text-xs mt-0.5">Confirmed</p>
+          <div className="bg-card border border-border rounded-xl p-5 text-center">
+            <p className="font-display text-4xl font-bold text-patriots-red">{totalConfirmed}</p>
+            <p className="text-muted-foreground text-base mt-0.5">Confirmed</p>
           </div>
-          <div className="bg-card border border-border rounded-lg p-3 text-center">
-            <p className="font-display text-2xl font-bold text-seahawks-green">{totalAvailable}</p>
-            <p className="text-muted-foreground text-xs mt-0.5">Available</p>
+          <div className="bg-card border border-border rounded-xl p-5 text-center">
+            <p className="font-display text-4xl font-bold text-seahawks-green">{totalAvailable}</p>
+            <p className="text-muted-foreground text-base mt-0.5">Available</p>
           </div>
         </div>
       </div>
 
       {/* Content */}
-      <div className="flex-1 px-4 sm:px-6 py-6 max-w-3xl mx-auto w-full">
+      <div className="flex-1 px-4 sm:px-6 py-7 max-w-3xl mx-auto w-full">
         {/* Countdown */}
-        <section className="mb-6">
-          <div className="bg-card border border-border rounded-lg p-4 flex flex-col gap-4">
+        <section className="mb-7">
+          <div className="bg-card border border-border rounded-xl p-6 flex flex-col gap-4">
             <CountdownTimer revealAt={revealAt} showRevealButton />
             {tableLocked && (
-              <p className="text-xs text-muted-foreground">
+              <p className="text-base text-muted-foreground">
                 Table is locked for new selections.
               </p>
             )}
@@ -236,20 +265,20 @@ export function AdminDashboard({
 
         {/* Pending section */}
         {pendingClaims.length > 0 && (
-          <section className="mb-8">
-            <div className="flex items-center justify-between mb-3">
-              <h2 className="font-display text-sm font-bold uppercase tracking-wider text-pending">
+          <section className="mb-9">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="font-sans text-lg font-semibold uppercase tracking-wider text-pending">
                 Pending Confirmation ({totalPending} squares)
               </h2>
               <Button
                 size="sm"
                 onClick={confirmAll}
-                className="bg-seahawks-green hover:bg-seahawks-green/90 text-white font-display font-bold uppercase tracking-wide h-9 px-3 text-xs"
+                className="bg-seahawks-green hover:bg-seahawks-green/90 text-white font-sans font-semibold uppercase tracking-wide h-11 px-5 text-lg"
               >
                 Confirm All
               </Button>
             </div>
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-4">
               {pendingClaims.map((claim) => (
                 <ClaimRow
                   key={`${claim.owner}-pending`}
@@ -287,19 +316,37 @@ export function AdminDashboard({
 
         {/* Confirmed section */}
         {confirmedClaims.length > 0 && (
-          <section className="mb-8">
-            <h2 className="font-display text-sm font-bold uppercase tracking-wider text-patriots-red mb-3">
+          <section className="mb-9">
+            <h2 className="font-sans text-lg font-semibold uppercase tracking-wider text-patriots-red mb-4">
               Confirmed ({totalConfirmed} squares)
             </h2>
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-4">
               {confirmedClaims.map((claim) => (
                 <ClaimRow
                   key={`${claim.owner}-confirmed`}
                   owner={claim.owner}
                   squareIds={claim.squareIds}
                   status="confirmed"
+                  count={revokeCounts[`${claim.owner}-confirmed`] ?? 1}
+                  onDecrement={() =>
+                    setRevokeCounts((prev) => {
+                      const key = `${claim.owner}-confirmed`
+                      const current = prev[key] ?? 1
+                      return { ...prev, [key]: Math.max(1, current - 1) }
+                    })
+                  }
+                  onIncrement={() =>
+                    setRevokeCounts((prev) => {
+                      const key = `${claim.owner}-confirmed`
+                      const current = prev[key] ?? 1
+                      return { ...prev, [key]: Math.min(claim.squareIds.length, current + 1) }
+                    })
+                  }
                   onConfirm={() => {}}
-                  onReject={() => rejectBoxes(claim.squareIds)}
+                  onReject={() => {
+                    const count = revokeCounts[`${claim.owner}-confirmed`] ?? 1
+                    rejectBoxes(claim.squareIds.slice(0, count))
+                  }}
                 />
               ))}
             </div>
@@ -322,13 +369,13 @@ export function AdminDashboard({
                 d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
               />
             </svg>
-            <p className="text-muted-foreground font-display text-lg font-bold">
+            <p className="text-muted-foreground font-display text-2xl font-bold">
               No claims yet
             </p>
-            <p className="text-muted-foreground/60 text-sm mt-1">
+            <p className="text-muted-foreground/60 text-lg mt-1">
               Claims will appear here as people select squares on the main page.
             </p>
-            <p className="text-muted-foreground/40 text-xs mt-4">
+            <p className="text-muted-foreground/40 text-base mt-4">
               Note: Admin access requires your password.
             </p>
           </div>

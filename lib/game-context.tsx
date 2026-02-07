@@ -207,8 +207,12 @@ export function GameProvider({ children }: { children: ReactNode }) {
     const idSet = new Set(ids)
     setBoxes((prev) =>
       prev.map((box) =>
-        idSet.has(box.id) && box.status === "pending"
-          ? { ...box, owner: null, status: "available" as BoxStatus }
+        idSet.has(box.id)
+          ? box.status === "pending"
+            ? { ...box, owner: null, status: "available" as BoxStatus }
+            : box.status === "confirmed"
+              ? { ...box, status: "pending" as BoxStatus }
+              : box
           : box
       )
     )

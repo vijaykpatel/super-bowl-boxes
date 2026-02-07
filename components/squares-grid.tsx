@@ -167,7 +167,7 @@ export function SquaresGrid() {
       </div>
 
       {/* Legend */}
-      <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-6 mt-4 sm:mt-6 pt-4 sm:pt-5 border-t border-white/[0.06] text-xs sm:text-sm lg:text-base text-white/40">
+      <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-6 mt-4 sm:mt-6 pt-4 sm:pt-5 border-t border-white/[0.06] text-sm sm:text-base lg:text-lg text-white/40">
         <div className="flex items-center gap-1.5">
           <div className="w-3 h-3 rounded bg-white/[0.03] border border-white/[0.06]" />
           <span>Available</span>
