@@ -24,7 +24,8 @@ export async function GET(req: Request) {
   }
 
   const tables = await listTablesForOwnerEmail(ownerEmail)
-  return NextResponse.json({ tables })
+  const publicTables = tables.map(({ adminKey, ...rest }) => rest)
+  return NextResponse.json({ tables: publicTables })
 }
 
 export async function POST(req: Request) {

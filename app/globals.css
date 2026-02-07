@@ -120,6 +120,7 @@
 
 .animate-fade-in {
   animation: fade-in 0.8s ease-out;
+  animation-fill-mode: backwards;
 }
 
 .stadium-glow {

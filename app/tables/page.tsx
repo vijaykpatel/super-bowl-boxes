@@ -8,10 +8,10 @@ type Table = {
   id: string
   code: string
   name: string
-  adminKey: string
   pricePerBox: number
   payouts: { q1: number; q2: number; q3: number; final: number }
   visibility: "link" | "code"
+  accessCode?: string
   kickoffAt: number
   lock: { status: "open" | "locked" }
 }
@@ -21,6 +21,7 @@ export default function TablesPage() {
   const [loading, setLoading] = useState(true)
   const [ownerEmail, setOwnerEmail] = useState("")
   const [emailError, setEmailError] = useState("")
+  const [adminKeys, setAdminKeys] = useState<Record<string, string>>({})
 
   useEffect(() => {
     const stored = window.localStorage.getItem("owner_email")
@@ -31,6 +32,16 @@ export default function TablesPage() {
       setLoading(false)
     }
   }, [])
+
+  // Load admin keys from localStorage when tables change
+  useEffect(() => {
+    const keys: Record<string, string> = {}
+    for (const table of tables) {
+      const key = window.localStorage.getItem(`admin_key_${table.code}`)
+      if (key) keys[table.code] = key
+    }
+    setAdminKeys(keys)
+  }, [tables])
 
   const origin = useMemo(() => {
     if (typeof window === "undefined") return ""
@@ -146,11 +157,20 @@ export default function TablesPage() {
 
               <div className="flex flex-wrap gap-4 text-base sm:text-lg text-muted-foreground">
                 <span>Code: <span className="font-mono font-semibold text-foreground">{table.code}</span></span>
-                <span>Visibility: {table.visibility === "code" ? "Link + Code" : "Link"}</span>
+                <span>Visibility: {table.visibility === "code" ? "Link + PIN" : "Link"}</span>
+                {table.visibility === "code" && table.accessCode && (
+                  <span>Access PIN: <span className="font-mono font-semibold text-foreground">{table.accessCode}</span></span>
+                )}
               </div>
-              <div className="flex flex-wrap gap-4 text-base sm:text-lg text-muted-foreground">
-                <span>Admin key: <span className="font-mono font-semibold text-foreground">{table.adminKey}</span></span>
-              </div>
+              {adminKeys[table.code] ? (
+                <div className="flex flex-wrap gap-4 text-base sm:text-lg text-muted-foreground">
+                  <span>Admin key: <span className="font-mono font-semibold text-foreground">{adminKeys[table.code]}</span></span>
+                </div>
+              ) : (
+                <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
+                  <span>Admin key saved on the device that created this table</span>
+                </div>
+              )}
 
               <div className="flex flex-wrap gap-3">
                 <Link
@@ -175,16 +195,17 @@ export default function TablesPage() {
                 >
                   Copy Share Link
                 </Button>
-                <Button
-                  variant="outline"
-                  onClick={() => {
-                    navigator.clipboard.writeText(table.adminKey)
-                    window.localStorage.setItem(`admin_key_${table.code}`, table.adminKey)
-                  }}
-                  className="border-2 border-border/80 text-foreground hover:text-foreground hover:bg-secondary/50 h-auto px-5 py-3 rounded-xl text-base"
-                >
-                  Copy Admin Key
-                </Button>
+                {adminKeys[table.code] && (
+                  <Button
+                    variant="outline"
+                    onClick={() => {
+                      navigator.clipboard.writeText(adminKeys[table.code])
+                    }}
+                    className="border-2 border-border/80 text-foreground hover:text-foreground hover:bg-secondary/50 h-auto px-5 py-3 rounded-xl text-base"
+                  >
+                    Copy Admin Key
+                  </Button>
+                )}
               </div>
             </div>
           ))}

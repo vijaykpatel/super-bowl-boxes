@@ -27,12 +27,12 @@ function getTimeLeft(target: Date): TimeLeft | null {
 function TimeBlock({ value, label }: { value: number; label: string }) {
   return (
     <div className="flex flex-col items-center">
-      <div className="bg-secondary/80 border-2 border-border/80 rounded-xl w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center shadow-lg">
-        <span className="font-display text-3xl sm:text-4xl text-foreground tabular-nums">
+      <div className="bg-secondary/80 border-2 border-border/80 rounded-xl w-14 h-14 sm:w-20 sm:h-20 flex items-center justify-center shadow-lg">
+        <span className="font-display text-2xl sm:text-4xl text-foreground tabular-nums">
           {String(value).padStart(2, "0")}
         </span>
       </div>
-      <span className="text-sm sm:text-base text-muted-foreground uppercase tracking-wider mt-2 font-semibold">
+      <span className="text-xs sm:text-base text-muted-foreground uppercase tracking-wider mt-2 font-semibold">
         {label}
       </span>
     </div>
@@ -109,7 +109,7 @@ export function CountdownTimer({
       <p className="text-muted-foreground text-sm sm:text-base uppercase tracking-[0.2em] mb-5 font-bold">
         Numbers reveal in
       </p>
-      <div className="flex items-center justify-center gap-3 sm:gap-4">
+      <div className="flex items-center justify-center gap-2 sm:gap-4">
         <TimeBlock value={timeLeft.days} label="Days" />
         <span className="text-muted-foreground text-2xl sm:text-3xl font-bold mt-[-20px]">
           :

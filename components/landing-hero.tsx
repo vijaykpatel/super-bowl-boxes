@@ -322,7 +322,7 @@ export function LandingHero() {
       <footer className="border-t-2 border-border/80 bg-card/95 backdrop-blur-xl py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <p className="text-muted-foreground text-base sm:text-lg">
-            Super Bowl Squares Platform • Game Day 2025
+            Super Bowl Squares Platform • Game Day 2026
           </p>
         </div>
       </footer>
