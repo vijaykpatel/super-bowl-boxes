@@ -94,95 +94,104 @@ export function SquaresGrid() {
   const { boxes, selectedBoxIds, toggleBox, rowNumbers, colNumbers, numbersRevealed } = useGame()
 
   return (
-    <div className="w-full max-w-[780px] mx-auto grid-shell rounded-2xl sm:rounded-3xl p-3 sm:p-5 lg:p-6">
-      {/* Top: Patriots header centered over grid columns */}
+    <div className="w-full max-w-[820px] mx-auto">
+      {/* Patriots header outside the card */}
       <div className="flex">
-        {/* Spacer matching left columns (branding + numbers) */}
-        <div className="shrink-0 w-[56px] sm:w-[96px] lg:w-[96px]" />
-        {/* Patriots header */}
-        <div className="flex-1 flex items-center justify-center gap-2 sm:gap-3 pb-2 sm:pb-4">
-          <span className="font-display text-sm sm:text-xl lg:text-xl uppercase tracking-[0.2em] text-patriots-red/90 font-bold">
-            Patriots
-          </span>
-        </div>
-      </div>
-
-      {/* Column numbers row */}
-      <div className="flex">
-        <div className="shrink-0 w-[56px] sm:w-[96px] lg:w-[96px]" />
-        <div className="flex-1 grid grid-cols-10 gap-[3px] sm:gap-1.5 lg:gap-1.5 mb-[3px] sm:mb-1.5 lg:mb-1.5">
-          {Array.from({ length: 10 }).map((_, i) => (
-            <div key={`col-${i}`} className="flex items-center justify-center">
-              <span className="text-xs sm:text-base lg:text-base font-display text-patriots-red tabular-nums font-bold">
-                {numbersRevealed && colNumbers ? colNumbers[i] : "?"}
+        {/* Spacer for Seahawks label column */}
+        <div className="shrink-0 w-8 sm:w-12 lg:w-12 mr-1 sm:mr-2" />
+        <div className="flex-1 px-3 sm:px-5 lg:px-6 pb-2 sm:pb-4">
+          <div className="flex items-center">
+            {/* Spacer for row numbers column */}
+            <div className="shrink-0 w-5 sm:w-8 lg:w-8" />
+            <div className="flex-1 flex items-center justify-center gap-2 sm:gap-3">
+              <span className="font-display text-base sm:text-2xl lg:text-2xl uppercase tracking-[0.2em] text-patriots-red/90 font-bold">
+                Patriots
               </span>
             </div>
-          ))}
+          </div>
         </div>
       </div>
 
-      {/* Main grid area */}
-      <div className="flex">
-        {/* Left: Seahawks branding (logo + vertical name) then row numbers */}
-        <div className="shrink-0 flex">
-          {/* Seahawks branding column — logo + vertical text, centered vertically */}
-          <div className="flex flex-col items-center justify-center w-8 sm:w-12 lg:w-12 mr-1 sm:mr-2">
-            <div className="flex flex-col items-center gap-0 leading-none">
-              {"SEAHAWKS".split("").map((letter, i) => (
-                <span key={i} className="font-display text-base sm:text-2xl lg:text-2xl text-seahawks-green/90 font-bold">
-                  {letter}
-                </span>
-              ))}
-            </div>
-          </div>
-
-          {/* Row numbers column */}
-          <div className="grid grid-rows-[repeat(10,1fr)] gap-[3px] sm:gap-1.5 lg:gap-1.5 w-5 sm:w-8 lg:w-8">
-            {Array.from({ length: 10 }).map((_, i) => (
-              <div
-                key={`row-${i}`}
-                className="flex items-center justify-center aspect-square"
-              >
-                <span className="text-sm sm:text-lg lg:text-lg font-display text-seahawks-green tabular-nums font-bold">
-                  {numbersRevealed && rowNumbers ? rowNumbers[i] : "?"}
-                </span>
-              </div>
+      <div className="flex items-stretch">
+        {/* Seahawks branding outside the card */}
+        <div className="shrink-0 flex items-center justify-center w-8 sm:w-12 lg:w-12 mr-1 sm:mr-2">
+          <div className="flex flex-col items-center gap-0 leading-none">
+            {"SEAHAWKS".split("").map((letter, i) => (
+              <span key={i} className="font-display text-base sm:text-2xl lg:text-2xl text-seahawks-green/90 font-bold">
+                {letter}
+              </span>
             ))}
           </div>
         </div>
 
-        {/* 10x10 Grid */}
-        <div className="flex-1 grid grid-cols-10 gap-[3px] sm:gap-1.5 lg:gap-1.5 ml-[3px] sm:ml-1.5 lg:ml-1.5">
-          {boxes.map((box) => (
-            <GridCell
-              key={box.id}
-              id={box.id}
-              owner={box.owner}
-              status={box.status}
-              isInSelection={selectedBoxIds.has(box.id)}
-              onClick={() => toggleBox(box.id)}
-            />
-          ))}
-        </div>
-      </div>
+        {/* Card wrapper with centered grid */}
+        <div className="flex-1 grid-shell rounded-2xl sm:rounded-3xl p-2.5 sm:p-4 lg:p-5">
+          <div className="w-full max-w-[740px] mx-auto">
+            {/* Column numbers row */}
+            <div className="flex">
+              <div className="shrink-0 w-5 sm:w-8 lg:w-8" />
+              <div className="flex-1 grid grid-cols-10 gap-[3px] sm:gap-1.5 lg:gap-1.5 mb-[3px] sm:mb-1.5 lg:mb-1.5">
+                {Array.from({ length: 10 }).map((_, i) => (
+                  <div key={`col-${i}`} className="flex items-center justify-center">
+                    <span className="text-xs sm:text-base lg:text-base font-display text-patriots-red tabular-nums font-bold">
+                      {numbersRevealed && colNumbers ? colNumbers[i] : "?"}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
 
-      {/* Legend */}
-      <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-6 mt-4 sm:mt-6 pt-4 sm:pt-5 border-t border-white/[0.06] text-sm sm:text-base lg:text-lg text-white/40">
-        <div className="flex items-center gap-1.5">
-          <div className="w-3 h-3 rounded bg-white/[0.03] border border-white/[0.06]" />
-          <span>Available</span>
-        </div>
-        <div className="flex items-center gap-1.5">
-          <div className="w-3 h-3 rounded bg-seahawks-green/30 border border-seahawks-green" />
-          <span>Your pick</span>
-        </div>
-        <div className="flex items-center gap-1.5">
-          <div className="w-3 h-3 rounded bg-pending/20 border border-pending/50" />
-          <span>Pending</span>
-        </div>
-        <div className="flex items-center gap-1.5">
-          <div className="w-3 h-3 rounded bg-patriots-red/25 border border-patriots-red/40" />
-          <span>Confirmed</span>
+            {/* Main grid area */}
+            <div className="flex">
+              {/* Row numbers column */}
+              <div className="grid grid-rows-[repeat(10,1fr)] gap-[3px] sm:gap-1.5 lg:gap-1.5 w-5 sm:w-8 lg:w-8">
+                {Array.from({ length: 10 }).map((_, i) => (
+                  <div
+                    key={`row-${i}`}
+                    className="flex items-center justify-center aspect-square"
+                  >
+                    <span className="text-sm sm:text-lg lg:text-lg font-display text-seahawks-green tabular-nums font-bold">
+                      {numbersRevealed && rowNumbers ? rowNumbers[i] : "?"}
+                    </span>
+                  </div>
+                ))}
+              </div>
+
+              {/* 10x10 Grid */}
+              <div className="flex-1 grid grid-cols-10 gap-[3px] sm:gap-1.5 lg:gap-1.5 ml-[3px] sm:ml-1.5 lg:ml-1.5">
+                {boxes.map((box) => (
+                  <GridCell
+                    key={box.id}
+                    id={box.id}
+                    owner={box.owner}
+                    status={box.status}
+                    isInSelection={selectedBoxIds.has(box.id)}
+                    onClick={() => toggleBox(box.id)}
+                  />
+                ))}
+              </div>
+            </div>
+
+            {/* Legend */}
+            <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-6 mt-3 sm:mt-4 pt-3 sm:pt-4 pb-2 sm:pb-3 border-t border-white/[0.06] text-sm sm:text-base lg:text-lg text-white/40">
+              <div className="flex items-center gap-1.5">
+                <div className="w-3 h-3 rounded bg-white/[0.03] border border-white/[0.06]" />
+                <span>Available</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <div className="w-3 h-3 rounded bg-seahawks-green/30 border border-seahawks-green" />
+                <span>Your pick</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <div className="w-3 h-3 rounded bg-pending/20 border border-pending/50" />
+                <span>Pending</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <div className="w-3 h-3 rounded bg-patriots-red/25 border border-patriots-red/40" />
+                <span>Confirmed</span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

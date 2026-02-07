@@ -305,7 +305,7 @@ export default function Page() {
               </span>
               <p className="text-xs sm:text-sm uppercase tracking-[0.2em] text-white/45 text-center">
                 To be approved, payment must be made to{" "}
-                <span className="text-white/70">Vijay Patel</span>{" "}
+                <span className="text-white/70">Vijay</span>{" "}
                 <span className="text-white/25">·</span>{" "}
                 <a
                   href="https://venmo.com/u/vijay_patel"

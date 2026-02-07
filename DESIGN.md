@@ -1,7 +1,7 @@
 # MH Super Bowl Boxes — Design Notes
 
 ## Overview
-Single, fixed Super Bowl Squares game with $1 boxes, cinematic broadcast styling, and a streamlined admin approval flow.
+Single, fixed Super Bowl Squares game with $5 boxes, cinematic broadcast styling, and a streamlined admin approval flow.
 
 ## Visual Direction
 - Broadcast-inspired hero with full-bleed stadium imagery, animated light leaks, and floating orbs.

@@ -95,7 +95,7 @@ export function CheckoutPanel({ pricePerBox }: { pricePerBox: number }) {
             </p>
             <p className="text-white/70 text-sm sm:text-base mt-2">
               Payment must be made to{" "}
-              <span className="text-white/85">Vijay Patel</span> on Venmo:{" "}
+              <span className="text-white/85">Vijay</span> via Zelle to his phone number or Venmo:{" "}
               <a
                 href="https://venmo.com/u/vijay_patel"
                 target="_blank"
@@ -104,6 +104,7 @@ export function CheckoutPanel({ pricePerBox }: { pricePerBox: number }) {
               >
                 @vijay_patel
               </a>
+              .
             </p>
           </div>
 
@@ -165,8 +166,8 @@ export function CheckoutPanel({ pricePerBox }: { pricePerBox: number }) {
               className="text-sb-cyan/80 hover:text-sb-cyan underline-offset-4 hover:underline"
             >
               @vijay_patel
-            </a>
-            .
+            </a>{" "}
+            or Zelle at Vijay's phone number.
           </p>
         </div>
         <div className="flex gap-2 sm:gap-3 shrink-0">
