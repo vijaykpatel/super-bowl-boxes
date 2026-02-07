@@ -37,27 +37,27 @@ function GridCell({
               : `Square ${id + 1} available, tap to select`
       }
       className={cn(
-        "relative flex items-center justify-center aspect-square min-h-[44px] min-w-[44px] transition-all duration-200 text-[10px] sm:text-xs font-medium border border-border/50 rounded-sm",
+        "relative flex items-center justify-center aspect-square min-h-[48px] min-w-[48px] sm:min-h-[52px] sm:min-w-[52px] transition-all duration-200 text-xs sm:text-sm font-semibold border-2 rounded-lg",
         isConfirmed &&
-          "bg-patriots-red/20 text-foreground cursor-not-allowed border-patriots-red/30",
+          "bg-patriots-red/25 text-foreground cursor-not-allowed border-patriots-red/40 shadow-sm",
         isPending &&
-          "bg-pending/15 text-foreground cursor-not-allowed border-pending/40 animate-pulse-pending",
+          "bg-pending/20 text-foreground cursor-not-allowed border-pending/50 animate-pulse-pending shadow-sm",
         isInSelection &&
-          "bg-seahawks-green/30 border-seahawks-green ring-1 ring-seahawks-green animate-pulse-green",
+          "bg-seahawks-green/35 border-seahawks-green ring-2 ring-seahawks-green/50 animate-pulse-green shadow-lg",
         !isTaken &&
           !isInSelection &&
-          "bg-secondary/50 hover:bg-secondary hover:border-muted-foreground/40 cursor-pointer active:scale-95"
+          "bg-secondary/60 hover:bg-secondary/80 hover:border-muted-foreground/50 cursor-pointer active:scale-95 border-border/60"
       )}
     >
       {isConfirmed && (
-        <span className="truncate px-0.5 leading-tight text-foreground/80">
+        <span className="truncate px-1 leading-tight text-foreground font-medium">
           {owner}
         </span>
       )}
       {isPending && (
-        <div className="flex flex-col items-center">
+        <div className="flex flex-col items-center gap-0.5">
           <svg
-            className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-pending"
+            className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-pending"
             fill="currentColor"
             viewBox="0 0 20 20"
           >
@@ -67,14 +67,14 @@ function GridCell({
               clipRule="evenodd"
             />
           </svg>
-          <span className="truncate px-0.5 leading-tight text-pending/80 text-[8px] sm:text-[9px]">
+          <span className="truncate px-1 leading-tight text-pending font-medium text-[10px] sm:text-xs">
             {owner}
           </span>
         </div>
       )}
       {isInSelection && (
         <svg
-          className="w-3 h-3 sm:w-4 sm:h-4 text-seahawks-green"
+          className="w-4 h-4 sm:w-5 sm:h-5 text-seahawks-green"
           fill="currentColor"
           viewBox="0 0 20 20"
         >
@@ -93,29 +93,29 @@ export function SquaresGrid() {
   const { boxes, selectedBoxIds, toggleBox, rowNumbers, colNumbers, numbersRevealed } = useGame()
 
   return (
-    <div className="w-full overflow-x-auto pb-2">
-      <div className="min-w-[360px] max-w-[680px] mx-auto">
+    <div className="w-full overflow-x-auto pb-4">
+      <div className="min-w-[400px] max-w-[760px] mx-auto">
         {/* Column headers - Patriots side */}
-        <div className="flex items-end mb-1 pl-10 sm:pl-14">
-          <div className="flex items-center gap-1 mb-1 w-full justify-center">
+        <div className="flex items-end mb-2 pl-12 sm:pl-16">
+          <div className="flex items-center gap-2 mb-2 w-full justify-center">
             <Image
               src="/images/patriots-logo.jpg"
               alt="New England Patriots"
-              width={24}
-              height={24}
-              className="rounded-full w-5 h-5 sm:w-6 sm:h-6 object-cover"
+              width={32}
+              height={32}
+              className="rounded-full w-6 h-6 sm:w-8 sm:h-8 object-cover border-2 border-patriots-red/50"
             />
-            <span className="font-display text-xs sm:text-sm uppercase tracking-wider text-patriots-red font-bold">
+            <span className="font-display text-base sm:text-lg uppercase tracking-[0.15em] text-patriots-red">
               Patriots
             </span>
           </div>
         </div>
 
-        <div className="flex items-end mb-0.5 pl-10 sm:pl-14">
+        <div className="flex items-end mb-1 pl-12 sm:pl-16">
           {Array.from({ length: 10 }).map((_, i) => (
             <div
               key={`col-${i}`}
-              className="flex-1 text-center text-xs sm:text-sm font-display font-bold text-patriots-red/80"
+              className="flex-1 text-center text-sm sm:text-base font-display text-patriots-red/90"
             >
               {numbersRevealed && colNumbers ? colNumbers[i] : "?"}
             </div>
@@ -124,23 +124,23 @@ export function SquaresGrid() {
 
         <div className="flex">
           {/* Row headers - Seahawks side */}
-          <div className="flex flex-col w-10 sm:w-14 shrink-0">
-            <div className="flex items-center gap-0.5 mb-1 justify-center">
+          <div className="flex flex-col w-12 sm:w-16 shrink-0">
+            <div className="flex items-center gap-1 mb-2 justify-center">
               <Image
                 src="/images/seahawks-logo.jpg"
                 alt="Seattle Seahawks"
-                width={24}
-                height={24}
-                className="rounded-full w-5 h-5 sm:w-6 sm:h-6 object-cover"
+                width={32}
+                height={32}
+                className="rounded-full w-6 h-6 sm:w-8 sm:h-8 object-cover border-2 border-seahawks-green/50"
               />
             </div>
-            <span className="font-display text-[10px] sm:text-xs uppercase tracking-wider text-seahawks-green font-bold text-center mb-1">
-              SEA
+            <span className="font-display text-xs sm:text-sm uppercase tracking-[0.15em] text-seahawks-green text-center mb-2 -rotate-90 origin-center translate-y-[140px]">
+              Seahawks
             </span>
             {Array.from({ length: 10 }).map((_, i) => (
               <div
                 key={`row-${i}`}
-                className="flex-1 flex items-center justify-center text-xs sm:text-sm font-display font-bold text-seahawks-green/80"
+                className="flex-1 flex items-center justify-center text-sm sm:text-base font-display text-seahawks-green/90 min-h-[48px] sm:min-h-[52px]"
               >
                 {numbersRevealed && rowNumbers ? rowNumbers[i] : "?"}
               </div>
@@ -148,7 +148,7 @@ export function SquaresGrid() {
           </div>
 
           {/* Grid */}
-          <div className="flex-1 grid grid-cols-10 gap-px bg-border/30 rounded-md overflow-hidden border border-border/50">
+          <div className="flex-1 grid grid-cols-10 gap-1 bg-border/50 rounded-2xl overflow-hidden border-2 border-border/70 p-1 shadow-2xl">
             {boxes.map((box) => (
               <GridCell
                 key={box.id}
@@ -163,21 +163,21 @@ export function SquaresGrid() {
         </div>
 
         {/* Legend */}
-        <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 mt-3 text-xs text-muted-foreground">
-          <div className="flex items-center gap-1.5">
-            <div className="w-3 h-3 rounded-sm bg-secondary/50 border border-border/50" />
+        <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 mt-6 text-sm sm:text-base text-muted-foreground">
+          <div className="flex items-center gap-2">
+            <div className="w-4 h-4 rounded-md bg-secondary/60 border-2 border-border/60" />
             <span>Available</span>
           </div>
-          <div className="flex items-center gap-1.5">
-            <div className="w-3 h-3 rounded-sm bg-seahawks-green/30 border border-seahawks-green" />
+          <div className="flex items-center gap-2">
+            <div className="w-4 h-4 rounded-md bg-seahawks-green/35 border-2 border-seahawks-green" />
             <span>Your pick</span>
           </div>
-          <div className="flex items-center gap-1.5">
-            <div className="w-3 h-3 rounded-sm bg-pending/15 border border-pending/40" />
-            <span>Pending payment</span>
+          <div className="flex items-center gap-2">
+            <div className="w-4 h-4 rounded-md bg-pending/20 border-2 border-pending/50" />
+            <span>Pending</span>
           </div>
-          <div className="flex items-center gap-1.5">
-            <div className="w-3 h-3 rounded-sm bg-patriots-red/20 border border-patriots-red/30" />
+          <div className="flex items-center gap-2">
+            <div className="w-4 h-4 rounded-md bg-patriots-red/25 border-2 border-patriots-red/40" />
             <span>Confirmed</span>
           </div>
         </div>

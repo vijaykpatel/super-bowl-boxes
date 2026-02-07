@@ -2,10 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  font-family: Arial, Helvetica, sans-serif;
-}
-
 @layer utilities {
   .text-balance {
     text-wrap: balance;
@@ -14,45 +10,45 @@ body {
 
 @layer base {
   :root {
-    /* Dark Super Bowl theme - Navy base with red/green team accents */
-    --background: 220 30% 6%;
-    --foreground: 210 20% 95%;
-    --card: 220 25% 10%;
-    --card-foreground: 210 20% 95%;
-    --popover: 220 25% 10%;
-    --popover-foreground: 210 20% 95%;
-    --primary: 4 80% 52%;
+    /* Premium Sports Broadcast Theme - Stadium atmosphere */
+    --background: 222 47% 11%;
+    --foreground: 210 40% 98%;
+    --card: 222 47% 15%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222 47% 15%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 4 90% 58%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 220 30% 16%;
-    --secondary-foreground: 210 20% 90%;
-    --muted: 220 20% 14%;
-    --muted-foreground: 215 15% 55%;
-    --accent: 145 63% 42%;
+    --secondary: 222 40% 20%;
+    --secondary-foreground: 210 40% 96%;
+    --muted: 217 33% 17%;
+    --muted-foreground: 215 20% 65%;
+    --accent: 145 63% 49%;
     --accent-foreground: 0 0% 100%;
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 98%;
-    --border: 220 20% 18%;
-    --input: 220 20% 18%;
-    --ring: 4 80% 52%;
-    --chart-1: 4 80% 52%;
-    --chart-2: 145 63% 42%;
+    --border: 217 33% 22%;
+    --input: 217 33% 22%;
+    --ring: 4 90% 58%;
+    --chart-1: 4 90% 58%;
+    --chart-2: 145 63% 49%;
     --chart-3: 220 60% 50%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
-    --radius: 0.5rem;
-    --seahawks-navy: 220 50% 18%;
-    --seahawks-green: 145 63% 42%;
-    --patriots-navy: 220 55% 20%;
-    --patriots-red: 4 80% 52%;
-    --pending: 40 90% 50%;
-    --sidebar-background: 220 30% 8%;
-    --sidebar-foreground: 210 20% 90%;
-    --sidebar-primary: 4 80% 52%;
+    --radius: 0.75rem;
+    --seahawks-navy: 222 47% 11%;
+    --seahawks-green: 145 63% 49%;
+    --patriots-navy: 222 55% 25%;
+    --patriots-red: 4 90% 58%;
+    --pending: 43 96% 56%;
+    --sidebar-background: 222 47% 13%;
+    --sidebar-foreground: 210 40% 96%;
+    --sidebar-primary: 4 90% 58%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 220 25% 14%;
-    --sidebar-accent-foreground: 210 20% 90%;
-    --sidebar-border: 220 20% 18%;
-    --sidebar-ring: 4 80% 52%;
+    --sidebar-accent: 222 40% 18%;
+    --sidebar-accent-foreground: 210 40% 96%;
+    --sidebar-border: 217 33% 22%;
+    --sidebar-ring: 4 90% 58%;
   }
 }
 
@@ -62,13 +58,26 @@ body {
   }
   body {
     @apply bg-background text-foreground;
+    font-size: 16px;
+  }
+}
+
+/* Stadium lights effect */
+@keyframes stadium-glow {
+  0%, 100% {
+    opacity: 0.4;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.05);
   }
 }
 
 /* Grid square animations */
 @keyframes pulse-green {
-  0%, 100% { box-shadow: 0 0 0 0 hsla(145, 63%, 42%, 0.4); }
-  50% { box-shadow: 0 0 0 6px hsla(145, 63%, 42%, 0); }
+  0%, 100% { box-shadow: 0 0 0 0 hsla(145, 63%, 49%, 0.5); }
+  50% { box-shadow: 0 0 0 8px hsla(145, 63%, 49%, 0); }
 }
 
 @keyframes shimmer {
@@ -77,8 +86,24 @@ body {
 }
 
 @keyframes pulse-pending {
-  0%, 100% { box-shadow: 0 0 0 0 hsla(40, 90%, 50%, 0.4); }
-  50% { box-shadow: 0 0 0 4px hsla(40, 90%, 50%, 0); }
+  0%, 100% { box-shadow: 0 0 0 0 hsla(43, 96%, 56%, 0.5); }
+  50% { box-shadow: 0 0 0 6px hsla(43, 96%, 56%, 0); }
+}
+
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 .animate-pulse-green {
@@ -89,13 +114,40 @@ body {
   animation: pulse-pending 2.5s ease-in-out infinite;
 }
 
+.animate-slide-up {
+  animation: slide-up 0.6s ease-out;
+}
+
+.animate-fade-in {
+  animation: fade-in 0.8s ease-out;
+}
+
+.stadium-glow {
+  animation: stadium-glow 4s ease-in-out infinite;
+}
+
 .shimmer-bg {
   background: linear-gradient(
     90deg,
-    hsla(220, 30%, 6%, 0) 0%,
-    hsla(220, 30%, 20%, 0.3) 50%,
-    hsla(220, 30%, 6%, 0) 100%
+    hsla(222, 47%, 11%, 0) 0%,
+    hsla(222, 47%, 25%, 0.4) 50%,
+    hsla(222, 47%, 11%, 0) 100%
   );
   background-size: 200% 100%;
   animation: shimmer 3s ease-in-out infinite;
+}
+
+/* Grain texture overlay */
+.grain-overlay {
+  position: relative;
+}
+
+.grain-overlay::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='2.5' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.15'/%3E%3C/svg%3E");
+  opacity: 0.03;
+  pointer-events: none;
+  z-index: 1;
 }

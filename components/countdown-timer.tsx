@@ -27,12 +27,12 @@ function getTimeLeft(target: Date): TimeLeft | null {
 function TimeBlock({ value, label }: { value: number; label: string }) {
   return (
     <div className="flex flex-col items-center">
-      <div className="bg-secondary border border-border rounded-md w-14 h-14 sm:w-16 sm:h-16 flex items-center justify-center">
-        <span className="font-display text-2xl sm:text-3xl font-bold text-foreground tabular-nums">
+      <div className="bg-secondary/80 border-2 border-border/80 rounded-xl w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center shadow-lg">
+        <span className="font-display text-3xl sm:text-4xl text-foreground tabular-nums">
           {String(value).padStart(2, "0")}
         </span>
       </div>
-      <span className="text-[10px] sm:text-xs text-muted-foreground uppercase tracking-wider mt-1 font-medium">
+      <span className="text-sm sm:text-base text-muted-foreground uppercase tracking-wider mt-2 font-semibold">
         {label}
       </span>
     </div>
@@ -69,9 +69,9 @@ export function CountdownTimer({
   if (numbersRevealed) {
     return (
       <div className="text-center">
-        <div className="inline-flex items-center gap-2 bg-seahawks-green/20 border border-seahawks-green/40 rounded-full px-4 py-2">
-          <div className="w-2 h-2 rounded-full bg-seahawks-green animate-pulse" />
-          <span className="text-seahawks-green font-display font-bold text-sm uppercase tracking-wider">
+        <div className="inline-flex items-center gap-3 bg-seahawks-green/20 border-2 border-seahawks-green/40 rounded-full px-6 py-3 shadow-lg">
+          <div className="w-3 h-3 rounded-full bg-seahawks-green animate-pulse" />
+          <span className="text-seahawks-green font-display text-base sm:text-lg uppercase tracking-wider">
             Numbers Revealed - Game On!
           </span>
         </div>
@@ -82,19 +82,19 @@ export function CountdownTimer({
   if (isExpired) {
     return (
       <div className="text-center">
-        <p className="text-foreground font-display text-lg font-bold mb-3">
+        <p className="text-foreground font-display text-xl sm:text-2xl uppercase tracking-tight mb-5">
           Numbers are ready to be revealed!
         </p>
         {showRevealButton ? (
           <button
             type="button"
             onClick={revealNumbers}
-            className="bg-patriots-red hover:bg-patriots-red/90 text-white font-display font-bold uppercase tracking-wide px-8 py-3 rounded-lg text-base transition-colors min-h-[48px]"
+            className="bg-patriots-red hover:bg-patriots-red/90 text-white font-display uppercase tracking-wider px-10 py-4 rounded-xl text-base sm:text-lg transition-all hover:scale-105 shadow-lg"
           >
             Reveal Numbers
           </button>
         ) : (
-          <p className="text-muted-foreground text-sm">
+          <p className="text-muted-foreground text-base sm:text-lg">
             Numbers will appear automatically shortly.
           </p>
         )}
@@ -106,20 +106,20 @@ export function CountdownTimer({
 
   return (
     <div className="text-center">
-      <p className="text-muted-foreground text-xs sm:text-sm uppercase tracking-widest mb-3 font-medium">
+      <p className="text-muted-foreground text-sm sm:text-base uppercase tracking-[0.2em] mb-5 font-bold">
         Numbers reveal in
       </p>
-      <div className="flex items-center justify-center gap-2 sm:gap-3">
+      <div className="flex items-center justify-center gap-3 sm:gap-4">
         <TimeBlock value={timeLeft.days} label="Days" />
-        <span className="text-muted-foreground text-xl font-bold mt-[-16px]">
+        <span className="text-muted-foreground text-2xl sm:text-3xl font-bold mt-[-20px]">
           :
         </span>
         <TimeBlock value={timeLeft.hours} label="Hrs" />
-        <span className="text-muted-foreground text-xl font-bold mt-[-16px]">
+        <span className="text-muted-foreground text-2xl sm:text-3xl font-bold mt-[-20px]">
           :
         </span>
         <TimeBlock value={timeLeft.minutes} label="Min" />
-        <span className="text-muted-foreground text-xl font-bold mt-[-16px]">
+        <span className="text-muted-foreground text-2xl sm:text-3xl font-bold mt-[-20px]">
           :
         </span>
         <TimeBlock value={timeLeft.seconds} label="Sec" />
