@@ -31,7 +31,7 @@ export function GridStats() {
         </div>
       </div>
       {/* Progress bar */}
-      <div className="w-full h-3 sm:h-4 bg-secondary rounded-full overflow-hidden flex shadow-inner">
+      <div className="w-full h-3 sm:h-4 bg-white/10 rounded-full overflow-hidden flex shadow-inner border border-white/10">
         <div
           className="h-full bg-patriots-red rounded-l-full transition-all duration-500"
           style={{ width: `${confirmed}%` }}

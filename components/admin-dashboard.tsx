@@ -2,10 +2,8 @@
 
 import { useGame } from "@/lib/game-context"
 import { Button } from "@/components/ui/button"
-import { cn } from "@/lib/utils"
 import Image from "next/image"
-import Link from "next/link"
-import { useMemo } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { CountdownTimer } from "@/components/countdown-timer"
 
 function StatusBadge({ status }: { status: "pending" | "confirmed" }) {
@@ -26,12 +24,18 @@ function ClaimRow({
   owner,
   squareIds,
   status,
+  count,
+  onDecrement,
+  onIncrement,
   onConfirm,
   onReject,
 }: {
   owner: string
   squareIds: number[]
   status: "pending" | "confirmed"
+  count?: number
+  onDecrement?: () => void
+  onIncrement?: () => void
   onConfirm: () => void
   onReject: () => void
 }) {
@@ -56,15 +60,39 @@ function ClaimRow({
         </p>
       </div>
 
-      <div className="flex gap-2 shrink-0">
+      <div className="flex flex-col sm:flex-row gap-2 shrink-0 items-stretch sm:items-center">
         {status === "pending" && (
           <>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={onDecrement}
+                className="h-10 w-10 rounded-full border border-border text-foreground hover:bg-secondary transition-all"
+                aria-label="Decrease approved count"
+              >
+                -
+              </button>
+              <div className="min-w-[70px] text-center">
+                <p className="text-xs uppercase tracking-widest text-muted-foreground">Approve</p>
+                <p className="font-display text-lg text-foreground">
+                  {count ?? squareIds.length}
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={onIncrement}
+                className="h-10 w-10 rounded-full border border-border text-foreground hover:bg-secondary transition-all"
+                aria-label="Increase approved count"
+              >
+                +
+              </button>
+            </div>
             <Button
               size="sm"
               onClick={onConfirm}
               className="bg-seahawks-green hover:bg-seahawks-green/90 text-white font-display font-bold uppercase tracking-wide h-10 px-4 min-w-[100px]"
             >
-              Confirm
+              Confirm {count ?? squareIds.length}
             </Button>
             <Button
               variant="outline"
@@ -72,7 +100,7 @@ function ClaimRow({
               onClick={onReject}
               className="border-destructive/50 text-destructive hover:bg-destructive/10 bg-transparent h-10 px-4 min-w-[100px]"
             >
-              Reject
+              Reject {count ?? squareIds.length}
             </Button>
           </>
         )}
@@ -92,15 +120,13 @@ function ClaimRow({
 }
 
 export function AdminDashboard({
-  tableCode,
   tableName,
   kickoffAt,
 }: {
-  tableCode: string
   tableName: string
   kickoffAt: number
 }) {
-  const { boxes, confirmBox, rejectBox, confirmAll, tableLocked, lockReason, refreshState, adminKey } = useGame()
+  const { boxes, confirmBoxes, rejectBoxes, confirmAll, tableLocked } = useGame()
 
   // Group boxes by owner and status
   const claims = useMemo(() => {
@@ -130,6 +156,26 @@ export function AdminDashboard({
   const totalConfirmed = confirmedClaims.reduce((sum, c) => sum + c.squareIds.length, 0)
   const totalAvailable = boxes.filter((b) => b.status === "available").length
   const revealAt = kickoffAt - 5 * 60 * 1000
+  const [approveCounts, setApproveCounts] = useState<Record<string, number>>({})
+
+  useEffect(() => {
+    setApproveCounts((prev) => {
+      const next: Record<string, number> = {}
+      for (const claim of pendingClaims) {
+        const key = `${claim.owner}-pending`
+        const max = claim.squareIds.length
+        const current = prev[key]
+        next[key] = current ? Math.min(current, max) : max
+      }
+      const prevKeys = Object.keys(prev)
+      const nextKeys = Object.keys(next)
+      if (prevKeys.length !== nextKeys.length) return next
+      for (const key of nextKeys) {
+        if (prev[key] !== next[key]) return next
+      }
+      return prev
+    })
+  }, [pendingClaims])
 
   return (
     <main className="min-h-screen flex flex-col">
@@ -149,23 +195,9 @@ export function AdminDashboard({
                 {tableName}
               </h1>
               <p className="text-muted-foreground text-xs">
-                Admin Panel • Table {tableCode}
+                Admin Panel
               </p>
             </div>
-          </div>
-          <div className="flex items-center gap-3">
-            <Link
-              href={`/t/${tableCode}`}
-              className="text-sm text-muted-foreground hover:text-foreground transition-colors underline underline-offset-4 min-h-[44px] flex items-center"
-            >
-              Back to table
-            </Link>
-            <Link
-              href="/tables"
-              className="text-xs text-muted-foreground hover:text-foreground transition-colors"
-            >
-              My tables
-            </Link>
           </div>
         </div>
       </header>
@@ -190,45 +222,15 @@ export function AdminDashboard({
 
       {/* Content */}
       <div className="flex-1 px-4 sm:px-6 py-6 max-w-3xl mx-auto w-full">
-        {/* Lock + Countdown */}
+        {/* Countdown */}
         <section className="mb-6">
           <div className="bg-card border border-border rounded-lg p-4 flex flex-col gap-4">
-            <div className="flex items-center justify-between gap-3">
-              <div>
-                <p className="font-display text-sm font-bold uppercase tracking-wider text-foreground">
-                  Table Status
-                </p>
-                <p className="text-muted-foreground text-xs mt-1">
-                  {tableLocked
-                    ? `Locked (${lockReason ?? "manual"})`
-                    : "Open for new selections"}
-                </p>
-              </div>
-              <Button
-                size="sm"
-                onClick={async () => {
-                  if (!adminKey) return
-                  await fetch(`/api/tables/${tableCode}/admin/lock`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                      status: tableLocked ? "open" : "locked",
-                      adminKey,
-                    }),
-                  })
-                  refreshState?.()
-                }}
-                className={cn(
-                  "h-9 px-4 text-xs font-display font-bold uppercase tracking-wide",
-                  tableLocked
-                    ? "bg-seahawks-green hover:bg-seahawks-green/90 text-white"
-                    : "bg-patriots-red hover:bg-patriots-red/90 text-white"
-                )}
-              >
-                {tableLocked ? "Unlock" : "Lock"}
-              </Button>
-            </div>
             <CountdownTimer revealAt={revealAt} showRevealButton />
+            {tableLocked && (
+              <p className="text-xs text-muted-foreground">
+                Table is locked for new selections.
+              </p>
+            )}
           </div>
         </section>
 
@@ -254,8 +256,29 @@ export function AdminDashboard({
                   owner={claim.owner}
                   squareIds={claim.squareIds}
                   status="pending"
-                  onConfirm={() => claim.squareIds.forEach((id) => confirmBox(id))}
-                  onReject={() => claim.squareIds.forEach((id) => rejectBox(id))}
+                  count={approveCounts[`${claim.owner}-pending`] ?? claim.squareIds.length}
+                  onDecrement={() =>
+                    setApproveCounts((prev) => {
+                      const key = `${claim.owner}-pending`
+                      const current = prev[key] ?? claim.squareIds.length
+                      return { ...prev, [key]: Math.max(1, current - 1) }
+                    })
+                  }
+                  onIncrement={() =>
+                    setApproveCounts((prev) => {
+                      const key = `${claim.owner}-pending`
+                      const current = prev[key] ?? claim.squareIds.length
+                      return { ...prev, [key]: Math.min(claim.squareIds.length, current + 1) }
+                    })
+                  }
+                  onConfirm={() => {
+                    const count = approveCounts[`${claim.owner}-pending`] ?? claim.squareIds.length
+                    confirmBoxes(claim.squareIds.slice(0, count))
+                  }}
+                  onReject={() => {
+                    const count = approveCounts[`${claim.owner}-pending`] ?? claim.squareIds.length
+                    rejectBoxes(claim.squareIds.slice(0, count))
+                  }}
                 />
               ))}
             </div>
@@ -276,7 +299,7 @@ export function AdminDashboard({
                   squareIds={claim.squareIds}
                   status="confirmed"
                   onConfirm={() => {}}
-                  onReject={() => claim.squareIds.forEach((id) => rejectBox(id))}
+                  onReject={() => rejectBoxes(claim.squareIds)}
                 />
               ))}
             </div>
@@ -306,7 +329,7 @@ export function AdminDashboard({
               Claims will appear here as people select squares on the main page.
             </p>
             <p className="text-muted-foreground/40 text-xs mt-4">
-              Note: Data is stored locally on this device. Share the same browser to manage claims.
+              Note: Admin access requires your password.
             </p>
           </div>
         )}

@@ -50,7 +50,7 @@ export function RulesSection({ customRules }: { customRules?: string }) {
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center justify-between px-6 py-4 bg-card/90 border-2 border-border/80 rounded-xl hover:bg-secondary/50 transition-all shadow-lg backdrop-blur-xl"
+        className="w-full flex items-center justify-between px-6 py-4 glass-panel rounded-2xl hover:bg-white/5 transition-all"
       >
         <span className="font-display text-lg sm:text-xl uppercase tracking-wider text-foreground">
           How It Works
@@ -74,16 +74,16 @@ export function RulesSection({ customRules }: { customRules?: string }) {
       </button>
 
       {isOpen && (
-        <div className="mt-4 bg-card/90 border-2 border-border/80 rounded-xl p-6 sm:p-8 backdrop-blur-xl shadow-xl">
+        <div className="mt-4 glass-panel rounded-2xl p-6 sm:p-8 shadow-xl">
           <div className="flex flex-col gap-6">
             {customRules && (
-              <div className="rounded-xl border-2 border-border/80 bg-secondary/60 p-5 text-base sm:text-lg text-muted-foreground whitespace-pre-wrap shadow-inner">
+              <div className="rounded-xl border border-white/10 bg-white/5 p-5 text-base sm:text-lg text-muted-foreground whitespace-pre-wrap shadow-inner">
                 {customRules}
               </div>
             )}
             {rules.map((rule) => (
               <div key={rule.step} className="flex gap-4">
-                <div className="shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-patriots-red/20 border-2 border-patriots-red/40 flex items-center justify-center shadow-lg">
+                <div className="shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-patriots-red/20 border border-patriots-red/40 flex items-center justify-center shadow-lg">
                   <span className="font-display text-lg sm:text-xl text-patriots-red">
                     {rule.step}
                   </span>

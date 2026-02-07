@@ -31,9 +31,11 @@ type GameContextType = {
   revealNumbers: () => void
   confirmBox: (id: number) => void
   rejectBox: (id: number) => void
+  confirmBoxes: (ids: number[]) => void
+  rejectBoxes: (ids: number[]) => void
   confirmAll: () => void
   refreshState?: () => void
-  adminKey?: string
+  adminPassword?: string
 }
 
 const GameContext = createContext<GameContextType | undefined>(undefined)
@@ -188,6 +190,30 @@ export function GameProvider({ children }: { children: ReactNode }) {
     )
   }, [])
 
+  const confirmBoxes = useCallback((ids: number[]) => {
+    if (ids.length === 0) return
+    const idSet = new Set(ids)
+    setBoxes((prev) =>
+      prev.map((box) =>
+        idSet.has(box.id) && box.status === "pending"
+          ? { ...box, status: "confirmed" as BoxStatus }
+          : box
+      )
+    )
+  }, [])
+
+  const rejectBoxes = useCallback((ids: number[]) => {
+    if (ids.length === 0) return
+    const idSet = new Set(ids)
+    setBoxes((prev) =>
+      prev.map((box) =>
+        idSet.has(box.id) && box.status === "pending"
+          ? { ...box, owner: null, status: "available" as BoxStatus }
+          : box
+      )
+    )
+  }, [])
+
   const confirmAll = useCallback(() => {
     setBoxes((prev) =>
       prev.map((box) =>
@@ -218,9 +244,11 @@ export function GameProvider({ children }: { children: ReactNode }) {
         revealNumbers,
         confirmBox,
         rejectBox,
+        confirmBoxes,
+        rejectBoxes,
         confirmAll,
         refreshState: undefined,
-        adminKey: undefined,
+        adminPassword: undefined,
       }}
     >
       {children}
@@ -230,13 +258,12 @@ export function GameProvider({ children }: { children: ReactNode }) {
 
 type ServerGameProviderProps = {
   children: ReactNode
-  code: string
   initialState: GameState
   initialLock: { status: "open" | "locked"; reason?: "auto" | "manual" }
-  adminKey?: string
+  adminPassword?: string
 }
 
-export function ServerGameProvider({ children, code, initialState, initialLock, adminKey }: ServerGameProviderProps) {
+export function ServerGameProvider({ children, initialState, initialLock, adminPassword }: ServerGameProviderProps) {
   const [boxes, setBoxes] = useState<BoxState[]>(initialState.boxes)
   const [selectedBoxIds, setSelectedBoxIds] = useState<Set<number>>(new Set())
   const [playerName, setPlayerName] = useState("")
@@ -248,7 +275,7 @@ export function ServerGameProvider({ children, code, initialState, initialLock, 
   const [lockReason, setLockReason] = useState<"auto" | "manual" | undefined>(initialLock.reason)
 
   const refreshState = useCallback(async () => {
-    const res = await fetch(`/api/tables/${code}/state`, { cache: "no-store" })
+    const res = await fetch(`/api/state`, { cache: "no-store" })
     if (!res.ok) return
     const data = await res.json()
     setBoxes(data.state.boxes)
@@ -257,7 +284,7 @@ export function ServerGameProvider({ children, code, initialState, initialLock, 
     setNumbersRevealed(data.state.numbersRevealed)
     setTableLocked(data.table.lock.status === "locked")
     setLockReason(data.table.lock.reason)
-  }, [code])
+  }, [])
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -289,7 +316,7 @@ export function ServerGameProvider({ children, code, initialState, initialLock, 
   const submitSelection = useCallback(async () => {
     if (tableLocked) return
     if (selectedBoxIds.size === 0 || !playerName.trim()) return
-    const res = await fetch(`/api/tables/${code}/claim`, {
+    const res = await fetch(`/api/claim`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -303,7 +330,7 @@ export function ServerGameProvider({ children, code, initialState, initialLock, 
     setGamePhase("submitted")
     setTimeout(() => setGamePhase("selecting"), 3000)
     refreshState()
-  }, [code, playerName, refreshState, selectedBoxIds, tableLocked])
+  }, [playerName, refreshState, selectedBoxIds, tableLocked])
 
   const clearSelection = useCallback(() => {
     setSelectedBoxIds(new Set())
@@ -311,56 +338,58 @@ export function ServerGameProvider({ children, code, initialState, initialLock, 
   }, [])
 
   const revealNumbers = useCallback(async () => {
-    if (!adminKey) return
-    const res = await fetch(`/api/tables/${code}/admin/reveal`, {
+    if (!adminPassword) return
+    const res = await fetch(`/api/admin/reveal`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ adminKey }),
+      body: JSON.stringify({ adminPassword }),
     })
     if (!res.ok) return
     refreshState()
-  }, [adminKey, code, refreshState])
+  }, [adminPassword, refreshState])
 
-  const confirmBox = useCallback(
-    async (id: number) => {
-      if (!adminKey) return
-      const res = await fetch(`/api/tables/${code}/admin/confirm`, {
+  const confirmBoxes = useCallback(
+    async (ids: number[]) => {
+      if (!adminPassword || ids.length === 0) return
+      const res = await fetch(`/api/admin/confirm`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ boxIds: [id], adminKey }),
+        body: JSON.stringify({ boxIds: ids, adminPassword }),
       })
       if (!res.ok) return
       refreshState()
     },
-    [adminKey, code, refreshState]
+    [adminPassword, refreshState]
   )
 
-  const rejectBox = useCallback(
-    async (id: number) => {
-      if (!adminKey) return
-      const res = await fetch(`/api/tables/${code}/admin/reject`, {
+  const rejectBoxes = useCallback(
+    async (ids: number[]) => {
+      if (!adminPassword || ids.length === 0) return
+      const res = await fetch(`/api/admin/reject`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ boxIds: [id], adminKey }),
+        body: JSON.stringify({ boxIds: ids, adminPassword }),
       })
       if (!res.ok) return
       refreshState()
     },
-    [adminKey, code, refreshState]
+    [adminPassword, refreshState]
   )
+
+  const confirmBox = useCallback((id: number) => {
+    confirmBoxes([id])
+  }, [confirmBoxes])
+
+  const rejectBox = useCallback((id: number) => {
+    rejectBoxes([id])
+  }, [rejectBoxes])
 
   const confirmAll = useCallback(async () => {
-    if (!adminKey) return
+    if (!adminPassword) return
     const pendingIds = boxes.filter((b) => b.status === "pending").map((b) => b.id)
     if (pendingIds.length === 0) return
-    const res = await fetch(`/api/tables/${code}/admin/confirm`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ boxIds: pendingIds, adminKey }),
-    })
-    if (!res.ok) return
-    refreshState()
-  }, [adminKey, boxes, code, refreshState])
+    confirmBoxes(pendingIds)
+  }, [adminPassword, boxes, confirmBoxes])
 
   return (
     <GameContext.Provider
@@ -382,9 +411,11 @@ export function ServerGameProvider({ children, code, initialState, initialLock, 
         revealNumbers,
         confirmBox,
         rejectBox,
+        confirmBoxes,
+        rejectBoxes,
         confirmAll,
         refreshState,
-        adminKey,
+        adminPassword,
       }}
     >
       {children}
