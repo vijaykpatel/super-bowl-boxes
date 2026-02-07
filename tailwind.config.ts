@@ -26,6 +26,11 @@ const config: Config = {
           red: 'hsl(var(--patriots-red))',
         },
         pending: 'hsl(var(--pending))',
+        sb: {
+          cyan: 'hsl(var(--sb-cyan))',
+          magenta: 'hsl(var(--sb-magenta))',
+          gold: 'hsl(var(--sb-gold))',
+        },
         card: {
           DEFAULT: 'hsl(var(--card))',
           foreground: 'hsl(var(--card-foreground))',
@@ -82,20 +87,12 @@ const config: Config = {
       },
       keyframes: {
         'accordion-down': {
-          from: {
-            height: '0',
-          },
-          to: {
-            height: 'var(--radix-accordion-content-height)',
-          },
+          from: { height: '0' },
+          to: { height: 'var(--radix-accordion-content-height)' },
         },
         'accordion-up': {
-          from: {
-            height: 'var(--radix-accordion-content-height)',
-          },
-          to: {
-            height: '0',
-          },
+          from: { height: 'var(--radix-accordion-content-height)' },
+          to: { height: '0' },
         },
       },
       animation: {

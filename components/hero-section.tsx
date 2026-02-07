@@ -24,7 +24,7 @@ export function HeroSection() {
           <div className="flex flex-col items-center">
             <div className="w-16 h-16 sm:w-24 sm:h-24 rounded-full overflow-hidden border-2 border-seahawks-green/60 shadow-lg shadow-seahawks-green/20">
               <Image
-                src="/images/seahawks-logo.jpg"
+                src="/images/seahawks-logo.png"
                 alt="Seattle Seahawks"
                 width={96}
                 height={96}
@@ -45,7 +45,7 @@ export function HeroSection() {
           <div className="flex flex-col items-center">
             <div className="w-16 h-16 sm:w-24 sm:h-24 rounded-full overflow-hidden border-2 border-patriots-red/60 shadow-lg shadow-patriots-red/20">
               <Image
-                src="/images/patriots-logo.jpg"
+                src="/images/patriots-logo.png"
                 alt="New England Patriots"
                 width={96}
                 height={96}
