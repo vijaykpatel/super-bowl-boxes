@@ -46,18 +46,18 @@ export function RulesSection({ customRules }: { customRules?: string }) {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
-    <div className="w-full max-w-2xl mx-auto">
+    <div className="w-full max-w-3xl mx-auto">
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center justify-between px-4 py-3 bg-card border border-border rounded-lg hover:bg-secondary/50 transition-colors min-h-[48px]"
+        className="w-full flex items-center justify-between px-6 py-4 bg-card/90 border-2 border-border/80 rounded-xl hover:bg-secondary/50 transition-all shadow-lg backdrop-blur-xl"
       >
-        <span className="font-display text-sm font-bold uppercase tracking-wider text-foreground">
+        <span className="font-display text-lg sm:text-xl uppercase tracking-wider text-foreground">
           How It Works
         </span>
         <svg
           className={cn(
-            "w-5 h-5 text-muted-foreground transition-transform duration-200",
+            "w-6 h-6 sm:w-7 sm:h-7 text-muted-foreground transition-transform duration-200",
             isOpen && "rotate-180"
           )}
           fill="none"
@@ -74,25 +74,25 @@ export function RulesSection({ customRules }: { customRules?: string }) {
       </button>
 
       {isOpen && (
-        <div className="mt-2 bg-card border border-border rounded-lg p-4">
-          <div className="flex flex-col gap-4">
+        <div className="mt-4 bg-card/90 border-2 border-border/80 rounded-xl p-6 sm:p-8 backdrop-blur-xl shadow-xl">
+          <div className="flex flex-col gap-6">
             {customRules && (
-              <div className="rounded-md border border-border/50 bg-secondary/40 p-3 text-xs text-muted-foreground whitespace-pre-wrap">
+              <div className="rounded-xl border-2 border-border/80 bg-secondary/60 p-5 text-base sm:text-lg text-muted-foreground whitespace-pre-wrap shadow-inner">
                 {customRules}
               </div>
             )}
             {rules.map((rule) => (
-              <div key={rule.step} className="flex gap-3">
-                <div className="shrink-0 w-8 h-8 rounded-full bg-patriots-red/20 border border-patriots-red/30 flex items-center justify-center">
-                  <span className="font-display text-sm font-bold text-patriots-red">
+              <div key={rule.step} className="flex gap-4">
+                <div className="shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-patriots-red/20 border-2 border-patriots-red/40 flex items-center justify-center shadow-lg">
+                  <span className="font-display text-lg sm:text-xl text-patriots-red">
                     {rule.step}
                   </span>
                 </div>
                 <div>
-                  <h4 className="font-display text-sm font-bold text-foreground">
+                  <h4 className="font-display text-base sm:text-lg text-foreground uppercase tracking-tight mb-2">
                     {rule.title}
                   </h4>
-                  <p className="text-muted-foreground text-xs mt-0.5 leading-relaxed">
+                  <p className="text-muted-foreground text-sm sm:text-base leading-relaxed">
                     {rule.description}
                   </p>
                 </div>

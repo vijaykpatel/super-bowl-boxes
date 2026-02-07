@@ -68,27 +68,32 @@ export default function TablePage({ params }: { params: { code: string } }) {
       initialState={data.state}
       initialLock={data.table.lock}
     >
-      <main className="min-h-screen flex flex-col">
-        <header className="border-b border-border bg-card">
-          <div className="max-w-5xl mx-auto px-4 sm:px-6 py-5">
-            <div className="flex flex-col gap-2">
-              <h1 className="font-display text-2xl sm:text-3xl font-black text-foreground uppercase tracking-tight">
+      <main className="min-h-screen flex flex-col grain-overlay">
+        <header className="border-b-2 border-border/80 bg-card/95 backdrop-blur-xl sticky top-0 z-50">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-5 sm:py-6">
+            <div className="flex flex-col gap-3">
+              <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl text-foreground uppercase tracking-tight leading-none">
                 {data.table.name}
               </h1>
-              <p className="text-muted-foreground text-sm">
+              <p className="text-muted-foreground text-base sm:text-lg">
                 ${data.table.pricePerBox} per box • Payouts: Q1 ${data.table.payouts.q1}, Q2 ${data.table.payouts.q2}, Q3 ${data.table.payouts.q3}, Final ${data.table.payouts.final}
               </p>
             </div>
           </div>
         </header>
 
-        <div className="flex-1 flex flex-col gap-6 px-3 sm:px-6 pb-8 max-w-5xl mx-auto w-full">
-          <section className="pt-4">
+        <div className="flex-1 flex flex-col gap-8 px-4 sm:px-6 lg:px-8 pb-12 max-w-6xl mx-auto w-full">
+          <section className="pt-6">
             <CountdownTimer revealAt={revealAt} showRevealButton={false} />
           </section>
           <section>
-            <div className="bg-card border border-border rounded-lg p-3 text-center text-xs text-muted-foreground">
-              Table auto‑locks 15 minutes before kickoff.
+            <div className="bg-card/90 border-2 border-border/80 rounded-xl p-4 sm:p-5 text-center backdrop-blur-xl">
+              <div className="flex items-center justify-center gap-2">
+                <span className="inline-block w-2 h-2 rounded-full bg-seahawks-green animate-pulse"></span>
+                <p className="text-base sm:text-lg text-muted-foreground font-medium">
+                  Table auto-locks 15 minutes before kickoff
+                </p>
+              </div>
             </div>
           </section>
 
@@ -104,15 +109,17 @@ export default function TablePage({ params }: { params: { code: string } }) {
             <SquaresGrid />
           </section>
 
-          <section className="sticky bottom-0 pb-4 pt-2 bg-gradient-to-t from-background via-background to-background/0 -mx-3 px-3 sm:-mx-6 sm:px-6">
+          <section className="sticky bottom-0 pb-6 pt-4 bg-gradient-to-t from-background via-background to-background/0 -mx-4 px-4 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
             <CheckoutPanel />
           </section>
         </div>
 
-        <footer className="text-center py-6 border-t border-border">
-          <p className="text-muted-foreground text-xs">
-            Table code: {data.table.code}
-          </p>
+        <footer className="border-t-2 border-border/80 bg-card/95 backdrop-blur-xl py-8">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <p className="text-muted-foreground text-base sm:text-lg">
+              Table code: {data.table.code}
+            </p>
+          </div>
         </footer>
       </main>
     </ServerGameProvider>

@@ -21,12 +21,12 @@ export function CheckoutPanel() {
 
   if (tableLocked) {
     return (
-      <div className="w-full max-w-md mx-auto">
-        <div className="bg-card border border-border rounded-lg p-4 text-center">
-          <p className="text-foreground font-display text-lg font-bold">
+      <div className="w-full max-w-lg mx-auto">
+        <div className="bg-card/90 border-2 border-border/80 rounded-xl p-6 text-center backdrop-blur-xl">
+          <p className="text-foreground font-display text-xl sm:text-2xl uppercase tracking-tight">
             Table Locked
           </p>
-          <p className="text-muted-foreground text-sm mt-1">
+          <p className="text-muted-foreground text-base sm:text-lg mt-2">
             New selections are paused for this table right now.
           </p>
         </div>
@@ -36,10 +36,10 @@ export function CheckoutPanel() {
 
   if (gamePhase === "submitted") {
     return (
-      <div className="w-full max-w-md mx-auto">
-        <div className="bg-pending/10 border border-pending/30 rounded-lg p-4 text-center">
+      <div className="w-full max-w-lg mx-auto">
+        <div className="bg-pending/15 border-2 border-pending/40 rounded-xl p-6 text-center backdrop-blur-xl">
           <svg
-            className="w-8 h-8 text-pending mx-auto mb-2"
+            className="w-12 h-12 text-pending mx-auto mb-3"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -51,10 +51,10 @@ export function CheckoutPanel() {
               d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
             />
           </svg>
-          <p className="text-foreground font-display text-lg font-bold">
+          <p className="text-foreground font-display text-xl sm:text-2xl uppercase tracking-tight">
             Squares Submitted!
           </p>
-          <p className="text-muted-foreground text-sm mt-1">
+          <p className="text-muted-foreground text-base sm:text-lg mt-2">
             Your squares are pending confirmation. Please send payment to lock them in.
           </p>
         </div>
@@ -64,8 +64,8 @@ export function CheckoutPanel() {
 
   if (count === 0 && gamePhase === "selecting") {
     return (
-      <div className="w-full max-w-md mx-auto text-center py-3">
-        <p className="text-muted-foreground text-sm">
+      <div className="w-full max-w-lg mx-auto text-center py-4">
+        <p className="text-muted-foreground text-base sm:text-lg">
           Tap on any available square above to get started
         </p>
       </div>
@@ -74,37 +74,37 @@ export function CheckoutPanel() {
 
   if (gamePhase === "checkout") {
     return (
-      <div className="w-full max-w-md mx-auto">
-        <div className="bg-card border border-border rounded-lg p-4">
-          <h3 className="font-display text-lg font-bold text-foreground mb-1">
+      <div className="w-full max-w-lg mx-auto">
+        <div className="bg-card/90 border-2 border-border/80 rounded-xl p-6 backdrop-blur-xl shadow-xl">
+          <h3 className="font-display text-2xl sm:text-3xl text-foreground uppercase tracking-tight mb-2">
             Claim Your Squares
           </h3>
-          <p className="text-muted-foreground text-sm mb-3">
+          <p className="text-muted-foreground text-base sm:text-lg mb-5">
             You selected{" "}
-            <span className="text-seahawks-green font-bold">{count}</span>{" "}
+            <span className="text-seahawks-green font-bold text-xl">{count}</span>{" "}
             {count === 1 ? "square" : "squares"}
           </p>
 
-          <div className="bg-pending/10 border border-pending/20 rounded-md p-3 mb-4">
-            <p className="text-pending text-xs font-medium">
+          <div className="bg-pending/15 border-2 border-pending/30 rounded-lg p-4 mb-5">
+            <p className="text-pending text-sm sm:text-base font-medium">
               Your squares will be held as PENDING until payment is confirmed by the admin. Please send payment after submitting.
             </p>
           </div>
 
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-4">
             <Input
               type="text"
               placeholder="Enter your name"
               value={playerName}
               onChange={(e) => setPlayerName(e.target.value)}
-              className="bg-secondary border-border text-foreground placeholder:text-muted-foreground h-12 text-base"
+              className="bg-secondary/80 border-2 border-border/80 text-foreground placeholder:text-muted-foreground h-14 text-base sm:text-lg rounded-xl"
               autoFocus
             />
-            <div className="flex gap-2">
+            <div className="flex gap-3">
               <Button
                 variant="outline"
                 onClick={clearSelection}
-                className="flex-1 h-12 border-border text-muted-foreground hover:text-foreground bg-transparent hover:bg-secondary"
+                className="flex-1 h-14 border-2 border-border/80 text-foreground hover:text-foreground bg-transparent hover:bg-secondary rounded-xl text-base sm:text-lg"
               >
                 Cancel
               </Button>
@@ -112,9 +112,9 @@ export function CheckoutPanel() {
                 onClick={submitSelection}
                 disabled={!playerName.trim()}
                 className={cn(
-                  "flex-1 h-12 font-display font-bold uppercase tracking-wide text-sm",
+                  "flex-1 h-14 font-display uppercase tracking-wider text-base sm:text-lg rounded-xl shadow-lg transition-all",
                   playerName.trim()
-                    ? "bg-seahawks-green hover:bg-seahawks-green/90 text-white"
+                    ? "bg-seahawks-green hover:bg-seahawks-green/90 text-white hover:scale-105 hover:shadow-seahawks-green/30"
                     : "bg-muted text-muted-foreground"
                 )}
               >
@@ -129,30 +129,28 @@ export function CheckoutPanel() {
 
   // selecting phase with boxes selected
   return (
-    <div className="w-full max-w-md mx-auto">
-      <div className="bg-card border border-border rounded-lg p-4 flex items-center justify-between gap-3">
+    <div className="w-full max-w-lg mx-auto">
+      <div className="bg-card/90 border-2 border-border/80 rounded-xl p-5 flex items-center justify-between gap-4 backdrop-blur-xl shadow-xl">
         <div>
-          <p className="text-foreground font-display font-bold">
+          <p className="text-foreground font-display text-xl sm:text-2xl uppercase tracking-tight">
             <span className="text-seahawks-green">{count}</span>{" "}
             {count === 1 ? "square" : "squares"} selected
           </p>
-          <p className="text-muted-foreground text-xs mt-0.5">
+          <p className="text-muted-foreground text-sm sm:text-base mt-1">
             Tap more squares or continue to checkout
           </p>
         </div>
-        <div className="flex gap-2 shrink-0">
+        <div className="flex gap-3 shrink-0">
           <Button
             variant="outline"
-            size="sm"
             onClick={clearSelection}
-            className="border-border text-muted-foreground hover:text-foreground bg-transparent hover:bg-secondary h-10 px-3"
+            className="border-2 border-border/80 text-foreground hover:text-foreground bg-transparent hover:bg-secondary h-12 px-4 rounded-xl text-base"
           >
             Clear
           </Button>
           <Button
-            size="sm"
             onClick={() => setGamePhase("checkout")}
-            className="bg-seahawks-green hover:bg-seahawks-green/90 text-white font-display font-bold uppercase tracking-wide h-10 px-4"
+            className="bg-seahawks-green hover:bg-seahawks-green/90 text-white font-display uppercase tracking-wider h-12 px-5 rounded-xl text-base shadow-lg hover:scale-105 transition-all"
           >
             Checkout
           </Button>

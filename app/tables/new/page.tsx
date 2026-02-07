@@ -80,59 +80,59 @@ export default function NewTablePage() {
   }
 
   return (
-    <main className="min-h-screen flex flex-col">
-      <header className="border-b border-border bg-card">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 py-6">
-          <h1 className="font-display text-2xl font-black text-foreground uppercase tracking-tight">
+    <main className="min-h-screen flex flex-col grain-overlay">
+      <header className="border-b-2 border-border/80 bg-card/95 backdrop-blur-xl sticky top-0 z-50">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-5 sm:py-6">
+          <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl text-foreground uppercase tracking-tight leading-none">
             Create a Table
           </h1>
-          <p className="text-muted-foreground text-xs">
+          <p className="text-muted-foreground text-base sm:text-lg mt-1">
             Set your rules and payouts, then share the link with your group.
           </p>
         </div>
       </header>
 
-      <div className="flex-1 max-w-4xl mx-auto px-4 sm:px-6 py-8 w-full">
-        <div className="bg-card border border-border rounded-lg p-6 flex flex-col gap-6">
+      <div className="flex-1 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 w-full">
+        <div className="bg-card/90 border-2 border-border/80 rounded-2xl p-6 sm:p-8 flex flex-col gap-8 backdrop-blur-xl shadow-xl">
           <div>
-            <label className="text-xs font-medium text-muted-foreground">
+            <label className="text-base sm:text-lg font-semibold text-muted-foreground mb-3 block">
               Table name / group name
             </label>
             <Input
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="e.g. Patel Family Super Bowl Pool"
-              className="bg-secondary border-border text-foreground mt-2"
+              placeholder="e.g. Super Bowl LIX Pool"
+              className="bg-secondary/80 border-2 border-border/80 text-foreground h-14 text-base sm:text-lg rounded-xl"
             />
           </div>
           <div>
-            <label className="text-xs font-medium text-muted-foreground">
+            <label className="text-base sm:text-lg font-semibold text-muted-foreground mb-3 block">
               Admin email
             </label>
             <Input
               value={ownerEmail}
               onChange={(e) => setOwnerEmail(e.target.value)}
               placeholder="you@example.com"
-              className="bg-secondary border-border text-foreground mt-2"
+              className="bg-secondary/80 border-2 border-border/80 text-foreground h-14 text-base sm:text-lg rounded-xl"
               type="email"
             />
           </div>
 
-          <div className="grid gap-4 lg:grid-cols-[1.2fr_0.8fr] items-start">
+          <div className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr] items-start">
             <div>
-              <label className="text-xs font-medium text-muted-foreground">
+              <label className="text-base sm:text-lg font-semibold text-muted-foreground mb-3 block">
                 Price per box
               </label>
-              <div className="flex flex-wrap gap-2 mt-2">
+              <div className="flex flex-wrap gap-3 mt-3">
                 {priceOptions.map((price) => (
                   <button
                     key={price}
                     type="button"
                     onClick={() => setPricePerBox(price)}
-                    className={`px-3 py-2 rounded-md text-xs border ${
+                    className={`px-5 py-3 rounded-xl text-base sm:text-lg font-semibold border-2 transition-all ${
                       pricePerBox === price
-                        ? "bg-seahawks-green text-white border-seahawks-green"
-                        : "border-border text-muted-foreground hover:text-foreground"
+                        ? "bg-seahawks-green text-white border-seahawks-green shadow-lg"
+                        : "border-border/80 text-muted-foreground hover:text-foreground hover:bg-secondary/50"
                     }`}
                   >
                     ${price}
@@ -142,115 +142,115 @@ export default function NewTablePage() {
                   type="number"
                   value={pricePerBox}
                   onChange={(e) => setPricePerBox(Number(e.target.value || 0))}
-                  className="w-24 bg-secondary border-border text-foreground"
+                  className="w-32 bg-secondary/80 border-2 border-border/80 text-foreground h-12 text-base sm:text-lg rounded-xl"
                   min={1}
                 />
               </div>
             </div>
-            <div className="bg-secondary/60 border border-border rounded-lg p-4">
-              <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground font-semibold">
+            <div className="bg-secondary/60 border-2 border-border/80 rounded-xl p-5 sm:p-6 shadow-lg">
+              <p className="text-sm uppercase tracking-[0.2em] text-muted-foreground font-bold mb-3">
                 Total pot
               </p>
-              <p className="text-2xl font-display font-bold text-foreground mt-2">
+              <p className="text-3xl sm:text-4xl font-display text-foreground">
                 ${totalPot.toFixed(2)}
               </p>
-              <p className="text-xs text-muted-foreground mt-1">
+              <p className="text-sm sm:text-base text-muted-foreground mt-2">
                 Based on 100 squares.
               </p>
             </div>
           </div>
 
           <div>
-            <label className="text-xs font-medium text-muted-foreground">
+            <label className="text-base sm:text-lg font-semibold text-muted-foreground mb-3 block">
               Payouts (percent)
             </label>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-2">
-              <div className="flex flex-col gap-1">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-3">
+              <div className="flex flex-col gap-2">
                 <Input
                   type="number"
                   value={q1Pct}
-                  onChange={(e) => setQ1Pct(Number(e.target.value || 0))}
-                  className="bg-secondary border-border text-foreground"
+                  onChange={(e) => setQ1Pct(e.target.value === '' ? 0 : parseInt(e.target.value, 10))}
+                  className="bg-secondary/80 border-2 border-border/80 text-foreground h-12 text-base rounded-xl"
                   placeholder="Q1 %"
                   min={0}
                   max={100}
                 />
-                <span className="text-[10px] text-muted-foreground">
+                <span className="text-sm sm:text-base text-muted-foreground font-medium">
                   ${payoutDollars.q1.toFixed(2)}
                 </span>
               </div>
-              <div className="flex flex-col gap-1">
+              <div className="flex flex-col gap-2">
                 <Input
                   type="number"
                   value={q2Pct}
-                  onChange={(e) => setQ2Pct(Number(e.target.value || 0))}
-                  className="bg-secondary border-border text-foreground"
+                  onChange={(e) => setQ2Pct(e.target.value === '' ? 0 : parseInt(e.target.value, 10))}
+                  className="bg-secondary/80 border-2 border-border/80 text-foreground h-12 text-base rounded-xl"
                   placeholder="Q2 %"
                   min={0}
                   max={100}
                 />
-                <span className="text-[10px] text-muted-foreground">
+                <span className="text-sm sm:text-base text-muted-foreground font-medium">
                   ${payoutDollars.q2.toFixed(2)}
                 </span>
               </div>
-              <div className="flex flex-col gap-1">
+              <div className="flex flex-col gap-2">
                 <Input
                   type="number"
                   value={q3Pct}
-                  onChange={(e) => setQ3Pct(Number(e.target.value || 0))}
-                  className="bg-secondary border-border text-foreground"
+                  onChange={(e) => setQ3Pct(e.target.value === '' ? 0 : parseInt(e.target.value, 10))}
+                  className="bg-secondary/80 border-2 border-border/80 text-foreground h-12 text-base rounded-xl"
                   placeholder="Q3 %"
                   min={0}
                   max={100}
                 />
-                <span className="text-[10px] text-muted-foreground">
+                <span className="text-sm sm:text-base text-muted-foreground font-medium">
                   ${payoutDollars.q3.toFixed(2)}
                 </span>
               </div>
-              <div className="flex flex-col gap-1">
+              <div className="flex flex-col gap-2">
                 <Input
                   type="number"
                   value={finalPct}
-                  onChange={(e) => setFinalPct(Number(e.target.value || 0))}
-                  className="bg-secondary border-border text-foreground"
+                  onChange={(e) => setFinalPct(e.target.value === '' ? 0 : parseInt(e.target.value, 10))}
+                  className="bg-secondary/80 border-2 border-border/80 text-foreground h-12 text-base rounded-xl"
                   placeholder="Final %"
                   min={0}
                   max={100}
                 />
-                <span className="text-[10px] text-muted-foreground">
+                <span className="text-sm sm:text-base text-muted-foreground font-medium">
                   ${payoutDollars.final.toFixed(2)}
                 </span>
               </div>
             </div>
-            <p className={`text-xs mt-2 ${totalPct === 100 ? "text-muted-foreground" : "text-destructive"}`}>
+            <p className={`text-base sm:text-lg mt-3 font-medium ${totalPct === 100 ? "text-muted-foreground" : "text-destructive"}`}>
               Total: {totalPct}% (must equal 100%)
             </p>
           </div>
 
-          <div className="bg-secondary/60 border border-border rounded-lg p-4">
-            <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground font-semibold">
+          <div className="bg-secondary/60 border-2 border-border/80 rounded-xl p-5 sm:p-6 shadow-lg">
+            <p className="text-sm uppercase tracking-[0.2em] text-muted-foreground font-bold mb-3">
               Kickoff time
             </p>
-            <p className="text-sm text-foreground font-display font-bold mt-2">
+            <p className="text-lg sm:text-xl text-foreground font-display mt-2">
               Sunday, February 8, 2026 at 6:30 PM ET
             </p>
-            <p className="text-xs text-muted-foreground mt-1">
+            <p className="text-sm sm:text-base text-muted-foreground mt-2">
               Numbers reveal 5 minutes before kickoff.
             </p>
           </div>
 
           <div>
-            <label className="text-xs font-medium text-muted-foreground">
+            <label className="text-base sm:text-lg font-semibold text-muted-foreground mb-3 block">
               Visibility
             </label>
-            <div className="flex gap-2 mt-2">
+            <div className="flex gap-3 mt-3">
               <button
                 type="button"
                 onClick={() => setVisibility("link")}
-                className={`px-3 py-2 rounded-md text-xs border ${
+                className={`px-6 py-3 rounded-xl text-base sm:text-lg font-semibold border-2 transition-all ${
                   visibility === "link"
-                    ? "bg-seahawks-green text-white border-seahawks-green"
-                    : "border-border text-muted-foreground hover:text-foreground"
+                    ? "bg-seahawks-green text-white border-seahawks-green shadow-lg"
+                    : "border-border/80 text-muted-foreground hover:text-foreground hover:bg-secondary/50"
                 }`}
               >
                 Link Only
@@ -258,10 +258,10 @@ export default function NewTablePage() {
               <button
                 type="button"
                 onClick={() => setVisibility("code")}
-                className={`px-3 py-2 rounded-md text-xs border ${
+                className={`px-6 py-3 rounded-xl text-base sm:text-lg font-semibold border-2 transition-all ${
                   visibility === "code"
-                    ? "bg-seahawks-green text-white border-seahawks-green"
-                    : "border-border text-muted-foreground hover:text-foreground"
+                    ? "bg-seahawks-green text-white border-seahawks-green shadow-lg"
+                    : "border-border/80 text-muted-foreground hover:text-foreground hover:bg-secondary/50"
                 }`}
               >
                 Link + Code
@@ -270,44 +270,44 @@ export default function NewTablePage() {
           </div>
 
           <div>
-            <label className="text-xs font-medium text-muted-foreground">
+            <label className="text-base sm:text-lg font-semibold text-muted-foreground mb-3 block">
               Rules (optional)
             </label>
             <Textarea
               value={rules}
               onChange={(e) => setRules(e.target.value)}
               placeholder="Add any custom rules or payout notes."
-              className="bg-secondary border-border text-foreground mt-2 min-h-[120px]"
+              className="bg-secondary/80 border-2 border-border/80 text-foreground text-base sm:text-lg mt-3 min-h-[140px] rounded-xl"
             />
           </div>
 
-          <div className="bg-card border border-border rounded-lg p-4">
-            <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground font-semibold">
+          <div className="bg-card/80 border-2 border-border/80 rounded-xl p-5 sm:p-6 backdrop-blur-xl">
+            <p className="text-sm uppercase tracking-[0.2em] text-muted-foreground font-bold mb-4">
               Base rules
             </p>
-            <div className="mt-3 text-xs text-muted-foreground flex flex-col gap-2">
-              <p>Selections are held as pending until admin confirmation.</p>
-              <p>Table auto‑locks 15 minutes before kickoff.</p>
-              <p>Numbers reveal 5 minutes before kickoff.</p>
-              <p>Winners are based on last digits each quarter.</p>
-              <p>Admin key will appear on the My Tables page after creation.</p>
+            <div className="mt-4 text-base sm:text-lg text-muted-foreground flex flex-col gap-3">
+              <p>• Selections are held as pending until admin confirmation.</p>
+              <p>• Table auto-locks 15 minutes before kickoff.</p>
+              <p>• Numbers reveal 5 minutes before kickoff.</p>
+              <p>• Winners are based on last digits each quarter.</p>
+              <p>• Admin key will appear on the My Tables page after creation.</p>
             </div>
           </div>
 
-          {error && <p className="text-xs text-destructive">{error}</p>}
+          {error && <p className="text-base sm:text-lg text-destructive font-medium">{error}</p>}
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-4">
             <Button
               onClick={handleSubmit}
               disabled={loading || totalPct !== 100}
-              className="bg-seahawks-green hover:bg-seahawks-green/90 text-white font-display font-bold uppercase tracking-wide"
+              className="bg-seahawks-green hover:bg-seahawks-green/90 text-white font-display uppercase tracking-wider h-14 px-8 text-base sm:text-lg rounded-xl shadow-lg hover:scale-105 transition-all"
             >
               {loading ? "Creating..." : "Create Table"}
             </Button>
             <Button
               variant="outline"
               onClick={() => router.push("/tables")}
-              className="border-border text-muted-foreground hover:text-foreground"
+              className="border-2 border-border/80 text-foreground hover:text-foreground hover:bg-secondary/50 h-14 px-8 text-base sm:text-lg rounded-xl"
             >
               Cancel
             </Button>

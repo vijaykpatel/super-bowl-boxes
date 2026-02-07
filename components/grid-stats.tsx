@@ -11,27 +11,27 @@ export function GridStats() {
   const claimedPercent = confirmed + pending
 
   return (
-    <div className="w-full max-w-2xl mx-auto">
-      <div className="flex items-center justify-between mb-2">
-        <span className="text-muted-foreground text-xs sm:text-sm font-medium">
-          <span className="text-seahawks-green font-bold">{available}</span>{" "}
+    <div className="w-full max-w-3xl mx-auto">
+      <div className="flex items-center justify-between mb-3">
+        <span className="text-muted-foreground text-base sm:text-lg font-medium">
+          <span className="text-seahawks-green font-bold text-xl sm:text-2xl">{available}</span>{" "}
           available
         </span>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-5">
           {pending > 0 && (
-            <span className="text-muted-foreground text-xs sm:text-sm font-medium">
-              <span className="text-pending font-bold">{pending}</span>{" "}
+            <span className="text-muted-foreground text-base sm:text-lg font-medium">
+              <span className="text-pending font-bold text-xl sm:text-2xl">{pending}</span>{" "}
               pending
             </span>
           )}
-          <span className="text-muted-foreground text-xs sm:text-sm font-medium">
-            <span className="text-patriots-red font-bold">{confirmed}</span>{" "}
+          <span className="text-muted-foreground text-base sm:text-lg font-medium">
+            <span className="text-patriots-red font-bold text-xl sm:text-2xl">{confirmed}</span>{" "}
             confirmed
           </span>
         </div>
       </div>
       {/* Progress bar */}
-      <div className="w-full h-2 bg-secondary rounded-full overflow-hidden flex">
+      <div className="w-full h-3 sm:h-4 bg-secondary rounded-full overflow-hidden flex shadow-inner">
         <div
           className="h-full bg-patriots-red rounded-l-full transition-all duration-500"
           style={{ width: `${confirmed}%` }}
