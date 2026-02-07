@@ -91,7 +91,7 @@ export default function Page() {
               alt="NFL"
               width={32}
               height={32}
-              className="w-6 h-6 sm:w-8 sm:h-8 opacity-50"
+              className="w-5 h-5 sm:w-7 sm:h-7 opacity-50"
             />
           </div>
         </div>
@@ -122,22 +122,22 @@ export default function Page() {
           <div className="absolute bottom-[10%] left-[40%] w-48 h-48 rounded-full bg-sb-cyan/6 blur-[80px] animate-float pointer-events-none" style={{ animationDelay: '4s' }} />
 
           {/* Hero content — edge to edge */}
-          <div className="relative z-10 w-full px-4 sm:px-8 lg:px-16 pt-2 sm:pt-4 lg:pt-6 pb-10 sm:pb-14 lg:pb-18">
+          <div className="relative z-10 w-full px-4 sm:px-8 lg:px-16 pt-0.5 sm:pt-2 lg:pt-4 pb-8 sm:pb-12 lg:pb-16">
             {/* Helmets + Trophy — fixed-height container, helmets overflow it */}
-            <div className="relative flex items-center justify-center animate-hero-entrance h-36 sm:h-48 lg:h-56 xl:h-64 overflow-visible mb-2 sm:mb-4">
+            <div className="relative flex items-center justify-center animate-hero-entrance h-32 sm:h-40 lg:h-48 xl:h-56 overflow-visible mb-2 sm:mb-3">
               <Image
                 src="/images/seahawks-logo.png"
                 alt="Seahawks"
                 width={800}
                 height={800}
-                className="absolute left-1/2 top-1/2 -translate-y-1/2 w-52 h-52 sm:w-80 sm:h-80 lg:w-[460px] lg:h-[460px] xl:w-[540px] xl:h-[540px] object-contain drop-shadow-[0_0_60px_hsla(152,85%,45%,0.5)] -translate-x-[118%] sm:-translate-x-[112%] lg:-translate-x-[107%] z-0 hover:scale-105 transition-transform duration-500"
+                className="absolute left-1/2 top-1/2 -translate-y-1/2 w-44 h-44 sm:w-[17rem] sm:h-[17rem] lg:w-[390px] lg:h-[390px] xl:w-[460px] xl:h-[460px] object-contain drop-shadow-[0_0_60px_hsla(152,85%,45%,0.5)] -translate-x-[118%] sm:-translate-x-[112%] lg:-translate-x-[107%] z-0 hover:scale-105 transition-transform duration-500"
               />
               <Image
                 src="/images/superbowl-logo.png"
                 alt="Super Bowl LIX"
                 width={500}
                 height={500}
-                className="relative w-48 sm:w-64 lg:w-80 xl:w-[360px] h-auto drop-shadow-[0_0_60px_hsla(45,100%,58%,0.35)] z-10"
+                className="relative w-[10.5rem] sm:w-[13.5rem] lg:w-[17rem] xl:w-[306px] h-auto drop-shadow-[0_0_60px_hsla(45,100%,58%,0.35)] z-10"
                 priority
               />
               <Image
@@ -145,20 +145,20 @@ export default function Page() {
                 alt="Patriots"
                 width={800}
                 height={800}
-                className="absolute left-1/2 top-1/2 -translate-y-1/2 w-52 h-52 sm:w-80 sm:h-80 lg:w-[460px] lg:h-[460px] xl:w-[540px] xl:h-[540px] object-contain drop-shadow-[0_0_60px_hsla(0,80%,55%,0.5)] translate-x-[18%] sm:translate-x-[12%] lg:translate-x-[7%] z-0 hover:scale-105 transition-transform duration-500"
+                className="absolute left-1/2 top-1/2 -translate-y-1/2 w-48 h-48 sm:w-[18rem] sm:h-[18rem] lg:w-[420px] lg:h-[420px] xl:w-[500px] xl:h-[500px] object-contain drop-shadow-[0_0_60px_hsla(0,80%,55%,0.5)] translate-x-[18%] sm:translate-x-[12%] lg:translate-x-[7%] z-0 hover:scale-105 transition-transform duration-500"
               />
             </div>
 
             {/* Title — MASSIVE */}
-            <h1 className="font-display text-5xl sm:text-7xl lg:text-8xl xl:text-9xl uppercase tracking-tight text-center mb-10 sm:mb-14 lg:mb-16 animate-hero-entrance stagger-2">
+            <h1 className="font-display text-[2.35rem] sm:text-[3.5rem] lg:text-[4.8rem] xl:text-[6.4rem] uppercase tracking-tight text-center mb-2 sm:mb-4 lg:mb-5 animate-hero-entrance stagger-2">
               <span className="gradient-text drop-shadow-lg">{data.table.name}</span>
             </h1>
 
             {/* ===== MATCHUP — MOBILE: stacked, DESKTOP: wide dramatic ===== */}
             {/* Desktop matchup (hidden on mobile) */}
-            <div className="hidden sm:flex items-end justify-center gap-8 lg:gap-16 xl:gap-24 animate-hero-entrance stagger-3">
+            <div className="hidden sm:flex items-end justify-center gap-4 lg:gap-10 xl:gap-12 animate-hero-entrance stagger-3">
               {/* Seahawks side */}
-              <div className="flex flex-col items-center flex-1 max-w-[340px]">
+              <div className="flex flex-col items-center flex-1 max-w-[290px]">
                 <div className="relative mb-4 player-card">
                   <div className="absolute -inset-6 bg-seahawks-green/20 rounded-3xl blur-2xl" />
                   <div className="absolute -inset-12 bg-seahawks-green/8 rounded-full blur-3xl" />
@@ -167,7 +167,7 @@ export default function Page() {
                     alt="Jaxon Smith-Njigba & Sam Darnold"
                     width={400}
                     height={520}
-                    className="relative w-[270px] h-72 lg:w-[340px] lg:h-[380px] xl:w-[380px] xl:h-[420px] rounded-2xl object-cover object-top border-2 border-seahawks-green/40 shadow-[0_8px_40px_hsla(152,85%,45%,0.2)]"
+                    className="relative w-[230px] h-[245px] lg:w-[290px] lg:h-[320px] xl:w-[320px] xl:h-[360px] rounded-2xl object-cover object-top border-2 border-seahawks-green/40 shadow-[0_8px_40px_hsla(152,85%,45%,0.2)]"
                   />
                   {/* Logo badge removed per request */}
                 </div>
@@ -178,7 +178,7 @@ export default function Page() {
               </div>
 
               {/* VS center — GLOWING */}
-              <div className="flex flex-col items-center gap-3 mb-16 lg:mb-20 shrink-0">
+              <div className="flex flex-col items-center gap-3 mb-14 lg:mb-16 shrink-0">
                 <div className="relative">
                   <span className="font-display text-7xl lg:text-8xl xl:text-9xl gradient-text vs-badge">
                     VS
@@ -195,7 +195,7 @@ export default function Page() {
               </div>
 
               {/* Patriots side */}
-              <div className="flex flex-col items-center flex-1 max-w-[340px]">
+              <div className="flex flex-col items-center flex-1 max-w-[290px]">
                 <div className="relative mb-4 player-card">
                   <div className="absolute -inset-6 bg-patriots-red/20 rounded-3xl blur-2xl" />
                   <div className="absolute -inset-12 bg-patriots-red/8 rounded-full blur-3xl" />
@@ -204,7 +204,7 @@ export default function Page() {
                     alt="Drake Maye"
                     width={400}
                     height={520}
-                    className="relative w-[270px] h-72 lg:w-[340px] lg:h-[380px] xl:w-[380px] xl:h-[420px] rounded-2xl object-cover object-top border-2 border-patriots-red/40 shadow-[0_8px_40px_hsla(0,80%,55%,0.2)]"
+                    className="relative w-[230px] h-[245px] lg:w-[290px] lg:h-[320px] xl:w-[320px] xl:h-[360px] rounded-2xl object-cover object-top border-2 border-patriots-red/40 shadow-[0_8px_40px_hsla(0,80%,55%,0.2)]"
                   />
                   {/* Logo badge removed per request */}
                 </div>
@@ -216,7 +216,7 @@ export default function Page() {
             </div>
 
             {/* Mobile matchup (visible only on mobile) */}
-            <div className="flex sm:hidden flex-col items-center gap-6 animate-hero-entrance stagger-3">
+            <div className="flex sm:hidden flex-col items-center gap-5 animate-hero-entrance stagger-3">
               {/* Both players side by side — compact */}
               <div className="flex items-stretch justify-center gap-3 w-full">
                 {/* Seahawks */}
@@ -228,7 +228,7 @@ export default function Page() {
                       alt="Jaxon Smith-Njigba & Sam Darnold"
                       width={300}
                       height={400}
-                      className="relative w-full h-52 rounded-xl object-cover object-top border-2 border-seahawks-green/40 shadow-[0_4px_20px_hsla(152,85%,45%,0.15)]"
+                      className="relative w-full h-44 rounded-xl object-cover object-top border-2 border-seahawks-green/40 shadow-[0_4px_20px_hsla(152,85%,45%,0.15)]"
                     />
                     {/* Logo badge removed per request */}
                   </div>
@@ -252,7 +252,7 @@ export default function Page() {
                       alt="Drake Maye"
                       width={300}
                       height={400}
-                      className="relative w-full h-52 rounded-xl object-cover object-top border-2 border-patriots-red/40 shadow-[0_4px_20px_hsla(0,80%,55%,0.15)]"
+                      className="relative w-full h-44 rounded-xl object-cover object-top border-2 border-patriots-red/40 shadow-[0_4px_20px_hsla(0,80%,55%,0.15)]"
                     />
                     {/* Logo badge removed per request */}
                   </div>
