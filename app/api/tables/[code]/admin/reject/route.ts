@@ -9,9 +9,10 @@ const schema = z.object({
 
 export async function POST(
   req: Request,
-  { params }: { params: { code: string } }
+  { params }: { params: Promise<{ code: string }> }
 ) {
-  const table = await getTableByCode(params.code)
+  const { code } = await params
+  const table = await getTableByCode(code)
   if (!table) {
     return NextResponse.json({ error: "Not found" }, { status: 404 })
   }
@@ -28,7 +29,7 @@ export async function POST(
   const state = await getTableState(table.id)
   const ids = new Set(parsed.data.boxIds)
   const nextBoxes = state.boxes.map((box) =>
-    ids.has(box.id) && box.status === "pending"
+    ids.has(box.id) && (box.status === "pending" || box.status === "confirmed")
       ? { ...box, status: "available", owner: null }
       : box
   )

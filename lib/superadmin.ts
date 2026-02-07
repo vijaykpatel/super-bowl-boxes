@@ -24,5 +24,6 @@ export function verifySuperadminSession(token: string) {
   const [payload, hmac] = token.split(".")
   if (!payload || !hmac) return false
   const expected = crypto.createHmac("sha256", getSessionSecret()).update(payload).digest("hex")
+  if (expected.length !== hmac.length) return false
   return crypto.timingSafeEqual(Buffer.from(expected), Buffer.from(hmac))
 }

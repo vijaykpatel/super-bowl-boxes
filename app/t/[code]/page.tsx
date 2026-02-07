@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useMemo, useState } from "react"
+import { use, useEffect, useMemo, useState } from "react"
 import { ServerGameProvider } from "@/lib/game-context"
 import { CountdownTimer } from "@/components/countdown-timer"
 import { GridStats } from "@/components/grid-stats"
@@ -21,6 +21,7 @@ type TablePayload = {
     visibility: "link" | "code"
     kickoffAt: number
     lock: { status: "open" | "locked"; reason?: "auto" | "manual" }
+    accessCode?: string
   }
   state: {
     boxes: any[]
@@ -31,13 +32,14 @@ type TablePayload = {
   }
 }
 
-export default function TablePage({ params }: { params: { code: string } }) {
+export default function TablePage({ params }: { params: Promise<{ code: string }> }) {
+  const { code } = use(params)
   const [data, setData] = useState<TablePayload | null>(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const fetchData = async () => {
-      const res = await fetch(`/api/tables/${params.code}/state`, { cache: "no-store" })
+      const res = await fetch(`/api/tables/${code}/state`, { cache: "no-store" })
       if (!res.ok) {
         setLoading(false)
         return
@@ -47,7 +49,7 @@ export default function TablePage({ params }: { params: { code: string } }) {
       setLoading(false)
     }
     fetchData()
-  }, [params.code])
+  }, [code])
 
   const revealAt = useMemo(() => {
     if (!data?.table?.kickoffAt) return undefined
@@ -64,7 +66,7 @@ export default function TablePage({ params }: { params: { code: string } }) {
 
   const content = (
     <ServerGameProvider
-      code={params.code}
+      code={code}
       initialState={data.state}
       initialLock={data.table.lock}
     >
@@ -75,8 +77,8 @@ export default function TablePage({ params }: { params: { code: string } }) {
               <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl text-foreground uppercase tracking-tight leading-none">
                 {data.table.name}
               </h1>
-              <p className="text-muted-foreground text-base sm:text-lg">
-                ${data.table.pricePerBox} per box • Payouts: Q1 ${data.table.payouts.q1}, Q2 ${data.table.payouts.q2}, Q3 ${data.table.payouts.q3}, Final ${data.table.payouts.final}
+              <p className="text-muted-foreground text-sm sm:text-lg">
+                ${data.table.pricePerBox}/box • Q1 ${data.table.payouts.q1} | Q2 ${data.table.payouts.q2} | Q3 ${data.table.payouts.q3} | Final ${data.table.payouts.final}
               </p>
             </div>
           </div>
@@ -109,7 +111,7 @@ export default function TablePage({ params }: { params: { code: string } }) {
             <SquaresGrid />
           </section>
 
-          <section className="sticky bottom-0 pb-6 pt-4 bg-gradient-to-t from-background via-background to-background/0 -mx-4 px-4 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
+          <section className="sticky bottom-0 pb-[max(1.5rem,env(safe-area-inset-bottom))] pt-4 bg-gradient-to-t from-background via-background to-background/0 -mx-4 px-4 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
             <CheckoutPanel />
           </section>
         </div>
@@ -125,8 +127,8 @@ export default function TablePage({ params }: { params: { code: string } }) {
     </ServerGameProvider>
   )
 
-  if (data.table.visibility === "code") {
-    return <TableAccessGuard requiredCode={data.table.code}>{content}</TableAccessGuard>
+  if (data.table.visibility === "code" && data.table.accessCode) {
+    return <TableAccessGuard requiredCode={data.table.accessCode}>{content}</TableAccessGuard>
   }
 
   return content

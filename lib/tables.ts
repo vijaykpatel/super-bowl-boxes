@@ -26,6 +26,7 @@ export type Table = {
   name: string
   ownerEmail: string
   adminKey: string
+  accessCode?: string
   pricePerBox: number
   currency: "USD"
   payouts: TablePayouts
@@ -65,6 +66,7 @@ const ALL_TABLES_KEY = "tables:all"
 const CODE_ALPHABET = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"
 const generateCode = customAlphabet(CODE_ALPHABET, 6)
 const generateAdminKey = customAlphabet(CODE_ALPHABET, 8)
+const generateAccessCode = customAlphabet("0123456789", 6)
 
 export function getKickoffAutoLockTime(kickoffAt: number) {
   return kickoffAt - 15 * 60 * 1000
@@ -122,9 +124,10 @@ export async function createTable(params: {
   const table: Table = {
     id,
     code,
-    name,
+    name: params.name,
     ownerEmail: params.ownerEmail,
     adminKey,
+    accessCode: params.visibility === "code" ? generateAccessCode() : undefined,
     pricePerBox: params.pricePerBox,
     currency: "USD",
     payouts: params.payouts,

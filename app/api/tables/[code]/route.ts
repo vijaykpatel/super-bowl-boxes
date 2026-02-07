@@ -3,9 +3,10 @@ import { getTableByCode } from "@/lib/tables"
 
 export async function GET(
   _req: Request,
-  { params }: { params: { code: string } }
+  { params }: { params: Promise<{ code: string }> }
 ) {
-  const table = await getTableByCode(params.code)
+  const { code } = await params
+  const table = await getTableByCode(code)
   if (!table) {
     return NextResponse.json({ error: "Not found" }, { status: 404 })
   }

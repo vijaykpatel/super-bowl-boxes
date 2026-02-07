@@ -21,17 +21,19 @@ export function TableAccessGuard({
     <div className="min-h-[60vh] flex items-center justify-center px-4">
       <div className="bg-card border border-border rounded-lg p-6 w-full max-w-md text-center">
         <h2 className="font-display text-xl font-bold text-foreground">
-          Enter Table Code
+          Enter Access PIN
         </h2>
         <p className="text-muted-foreground text-sm mt-1">
-          This table requires a 6‑digit code to join.
+          This table requires a 6‑digit PIN to view.
         </p>
         <div className="mt-4 flex flex-col gap-3">
           <Input
             value={code}
             onChange={(e) => setCode(e.target.value)}
-            placeholder="6-digit code"
+            placeholder="6-digit PIN"
             className="bg-secondary border-border text-foreground text-center tracking-widest"
+            inputMode="numeric"
+            maxLength={6}
           />
           <Button
             onClick={() => {

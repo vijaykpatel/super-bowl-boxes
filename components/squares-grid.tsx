@@ -37,7 +37,7 @@ function GridCell({
               : `Square ${id + 1} available, tap to select`
       }
       className={cn(
-        "relative flex items-center justify-center aspect-square min-h-[48px] min-w-[48px] sm:min-h-[52px] sm:min-w-[52px] transition-all duration-200 text-xs sm:text-sm font-semibold border-2 rounded-lg",
+        "relative flex items-center justify-center aspect-square min-h-0 sm:min-h-[52px] sm:min-w-[52px] transition-all duration-200 text-[10px] sm:text-sm font-semibold border sm:border-2 rounded-md sm:rounded-lg",
         isConfirmed &&
           "bg-patriots-red/25 text-foreground cursor-not-allowed border-patriots-red/40 shadow-sm",
         isPending &&
@@ -94,7 +94,7 @@ export function SquaresGrid() {
 
   return (
     <div className="w-full overflow-x-auto pb-4">
-      <div className="min-w-[400px] max-w-[760px] mx-auto">
+      <div className="min-w-[320px] max-w-[760px] mx-auto">
         {/* Column headers - Patriots side */}
         <div className="flex items-end mb-2 pl-12 sm:pl-16">
           <div className="flex items-center gap-2 mb-2 w-full justify-center">
@@ -140,7 +140,7 @@ export function SquaresGrid() {
             {Array.from({ length: 10 }).map((_, i) => (
               <div
                 key={`row-${i}`}
-                className="flex-1 flex items-center justify-center text-sm sm:text-base font-display text-seahawks-green/90 min-h-[48px] sm:min-h-[52px]"
+                className="flex-1 flex items-center justify-center text-xs sm:text-base font-display text-seahawks-green/90 min-h-[28px] sm:min-h-[52px]"
               >
                 {numbersRevealed && rowNumbers ? rowNumbers[i] : "?"}
               </div>

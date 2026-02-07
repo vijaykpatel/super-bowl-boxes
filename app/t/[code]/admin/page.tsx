@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { use, useEffect, useState } from "react"
 import { ServerGameProvider } from "@/lib/game-context"
 import { AdminDashboard } from "@/components/admin-dashboard"
 import { AdminKeyGate } from "@/components/admin-key-gate"
@@ -21,18 +21,19 @@ type AdminPayload = {
   }
 }
 
-export default function AdminPage({ params }: { params: { code: string } }) {
+export default function AdminPage({ params }: { params: Promise<{ code: string }> }) {
+  const { code } = use(params)
   const [data, setData] = useState<AdminPayload | null>(null)
   const [loading, setLoading] = useState(true)
   const [adminKey, setAdminKey] = useState<string | null>(null)
 
   useEffect(() => {
-    const storedKey = window.localStorage.getItem(`admin_key_${params.code}`)
+    const storedKey = window.localStorage.getItem(`admin_key_${code}`)
     if (storedKey) {
       setAdminKey(storedKey)
     }
     const fetchData = async () => {
-      const res = await fetch(`/api/tables/${params.code}/state`, { cache: "no-store" })
+      const res = await fetch(`/api/tables/${code}/state`, { cache: "no-store" })
       if (!res.ok) {
         setLoading(false)
         return
@@ -42,12 +43,12 @@ export default function AdminPage({ params }: { params: { code: string } }) {
       setLoading(false)
     }
     fetchData()
-  }, [params.code])
+  }, [code])
 
   if (!adminKey) {
     return (
       <AdminKeyGate
-        code={params.code}
+        code={code}
         onUnlock={(key) => setAdminKey(key)}
       />
     )
@@ -63,7 +64,7 @@ export default function AdminPage({ params }: { params: { code: string } }) {
 
   return (
     <ServerGameProvider
-      code={params.code}
+      code={code}
       adminKey={adminKey}
       initialState={data.state}
       initialLock={data.table.lock}
