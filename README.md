@@ -1,6 +1,6 @@
-# MH Super Bowl Boxes
+# Super Bowl Boxes
 
-A single-table Super Bowl Squares experience with a cinematic broadcast look, live status updates, and a lightweight admin workflow for confirming paid squares.
+A single-table Super Bowl Squares experience with a cinematic broadcast look to raise the excitement with family and friends for the big game! It has an easy to use interface and a lightweight admin workflow for confirming paid squares.
 
 Read more about the project here - https://www.vijaypatel.dev/projects/super-bowl-boxes.
 
