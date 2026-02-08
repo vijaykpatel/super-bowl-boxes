@@ -390,6 +390,9 @@ export default function Page() {
             </p>
             <div className="h-px w-8 sm:w-12 bg-gradient-to-l from-transparent to-white/10" />
           </div>
+          <p className="mt-4 text-center text-[11px] sm:text-xs text-white/40 max-w-3xl mx-auto px-6">
+            All forms of gambling carry the risk of financial loss. Please gamble responsibly and only with money you can afford to lose. If you or someone you know is struggling with gambling-related issues, we strongly recommend seeking professional help and support.
+          </p>
         </footer>
       </main>
     </ServerGameProvider>
