@@ -2,6 +2,8 @@
 
 A single-table Super Bowl Squares experience with a cinematic broadcast look, live status updates, and a lightweight admin workflow for confirming paid squares.
 
+Read more about the project here - https://www.vijaypatel.dev/projects/super-bowl-boxes.
+
 ## What It Does
 - Public grid at `/` with a full-bleed hero, matchup visuals, and live status bar.
 - Players pick squares, enter a name, and submit a claim (held as **pending**).
