@@ -157,6 +157,15 @@ export function AdminDashboard({
   const totalPending = pendingClaims.reduce((sum, c) => sum + c.squareIds.length, 0)
   const totalConfirmed = confirmedClaims.reduce((sum, c) => sum + c.squareIds.length, 0)
   const totalAvailable = boxes.filter((b) => b.status === "available").length
+  const uniquePeople = useMemo(() => {
+    const owners = new Set<string>()
+    for (const box of boxes) {
+      if (box.owner && (box.status === "pending" || box.status === "confirmed")) {
+        owners.add(box.owner)
+      }
+    }
+    return owners.size
+  }, [boxes])
   const revealAt = kickoffAt - 5 * 60 * 1000
   const [approveCounts, setApproveCounts] = useState<Record<string, number>>({})
   const [revokeCounts, setRevokeCounts] = useState<Record<string, number>>({})
@@ -232,7 +241,7 @@ export function AdminDashboard({
 
       {/* Stats overview */}
       <div className="px-4 sm:px-6 pt-7 max-w-3xl mx-auto w-full">
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
           <div className="bg-card border border-border rounded-xl p-5 text-center">
             <p className="font-display text-4xl font-bold text-pending">{totalPending}</p>
             <p className="text-muted-foreground text-base mt-0.5">Pending</p>
@@ -244,6 +253,10 @@ export function AdminDashboard({
           <div className="bg-card border border-border rounded-xl p-5 text-center">
             <p className="font-display text-4xl font-bold text-seahawks-green">{totalAvailable}</p>
             <p className="text-muted-foreground text-base mt-0.5">Available</p>
+          </div>
+          <div className="bg-card border border-border rounded-xl p-5 text-center">
+            <p className="font-display text-4xl font-bold text-sb-cyan">{uniquePeople}</p>
+            <p className="text-muted-foreground text-base mt-0.5">Unique People</p>
           </div>
         </div>
       </div>
