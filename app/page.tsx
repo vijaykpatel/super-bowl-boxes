@@ -304,7 +304,7 @@ export default function Page() {
             </div>
             <div className="flex flex-col items-center justify-center gap-2 mb-4 sm:mb-8">
               <span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs sm:text-sm uppercase tracking-[0.25em] text-sb-cyan/80">
-                Cost <span className="text-white/40">·</span> <span className="font-display text-white">$1</span> <span className="text-white/40">/ box</span>
+                Cost <span className="text-white/40">·</span> <span className="font-display text-white">$5</span> <span className="text-white/40">/ box</span>
               </span>
               <p className="text-xs sm:text-sm uppercase tracking-[0.2em] text-white/45 text-center">
                 To be approved, payment must be made to{" "}
