@@ -128,7 +128,7 @@ export function AdminDashboard({
   tableName: string
   kickoffAt: number
 }) {
-  const { boxes, confirmBoxes, rejectBoxes, confirmAll, reshuffleNumbers, tableLocked } = useGame()
+  const { boxes, confirmBoxes, rejectBoxes, confirmAll, tableLocked } = useGame()
 
   // Group boxes by owner and status
   const claims = useMemo(() => {
@@ -259,18 +259,7 @@ export function AdminDashboard({
               Live status with numbers revealed for admin.
             </p>
           </div>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => {
-              const ok = window.confirm("Re-roll the numbers? This will change the row/column digits for everyone.")
-              if (!ok) return
-              reshuffleNumbers()
-            }}
-            className="h-11 px-4 border-border text-muted-foreground hover:text-foreground hover:bg-secondary bg-transparent"
-          >
-            Re-roll Numbers
-          </Button>
+          <div />
         </div>
         <SquaresGrid readOnly forceRevealNumbers />
       </div>

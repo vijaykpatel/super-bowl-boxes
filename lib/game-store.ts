@@ -191,15 +191,3 @@ export async function revealNumbers() {
   }
   await kv.set(STORE_KEY, next)
 }
-
-export async function reshuffleNumbers() {
-  const previous = await getStore()
-  const next = structuredClone(previous)
-  next.state = {
-    ...next.state,
-    rowNumbers: generateShuffledNumbers(),
-    colNumbers: generateShuffledNumbers(),
-    updatedAt: Date.now(),
-  }
-  await kv.set(STORE_KEY, next)
-}
