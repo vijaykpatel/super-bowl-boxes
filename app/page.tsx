@@ -189,10 +189,10 @@ export default function Page() {
                 </div>
                 <div className="text-center">
                   <p className="text-base text-white/50 uppercase tracking-[0.3em] font-medium">
-                    Feb 9 &middot; 6:30 PM ET
+                    Feb 8 &middot; 6:30 PM ET
                   </p>
                   <p className="text-sm text-white/30 uppercase tracking-[0.2em] mt-1">
-                    Caesars Superdome &middot; New Orleans
+                    Levi's Stadium &middot; San Francisco, CA
                   </p>
                 </div>
               </div>
@@ -269,10 +269,10 @@ export default function Page() {
               {/* Game info */}
               <div className="text-center">
                 <p className="text-xs text-white/50 uppercase tracking-[0.3em] font-medium">
-                  Feb 9 &middot; 6:30 PM ET
+                  Feb 8 &middot; 6:30 PM ET
                 </p>
                 <p className="text-[10px] text-white/30 uppercase tracking-[0.2em] mt-0.5">
-                  Caesars Superdome &middot; New Orleans
+                  Levi's Stadium &middot; San Francisco, CA
                 </p>
               </div>
             </div>
