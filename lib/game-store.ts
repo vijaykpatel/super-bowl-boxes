@@ -72,10 +72,11 @@ async function getStore(): Promise<StoreState> {
 
 function applyAutoRules(next: StoreState) {
   const now = Date.now()
+  const allBoxesFilled = next.state.boxes.every((box) => box.status !== "available")
   if (now >= getAutoLockTime() && next.lock.status === "open") {
     next.lock = { status: "locked", reason: "auto", lockedAt: now }
   }
-  if (now >= getRevealTime() && !next.state.numbersRevealed) {
+  if ((now >= getRevealTime() || allBoxesFilled) && !next.state.numbersRevealed) {
     next.state = {
       ...next.state,
       rowNumbers: next.state.rowNumbers ?? generateShuffledNumbers(),
